@@ -41,14 +41,34 @@ public class Main {
             .country("France")
             .lastName("Mbappe")
             .firstName("Kilian")
-            .birthday(LocalDate.of(2001, 11, 19))
-            .balance(1500000)
+            .birthday(LocalDate.of(1995, 11, 19))
+            .balance(60000)
             .gender(Gender.MALE)
             .build());
 
-    System.out.println(AccountService.findAccountsExceedingBalance(accounts, 500));
-    System.out.println(AccountService.findUniqueCountryNames(accounts));
-    System.out.println(AccountService.hasAccountYoungerThan(accounts, 2000));
+    List<List<Account>> accountsLists = List.of(accounts);
+
+    System.out.println(AccountService.findExceedingBalance(accounts, 500));
+    System.out.println("---------------");
+    System.out.println(AccountService.findUniqueCountry(accounts));
+    System.out.println("---------------");
+    System.out.println(AccountService.hasYoungerThan(accounts, 2000));
+    System.out.println("---------------");
+    System.out.println(AccountService.findSumBalanceByGender(accounts));
+    System.out.println("---------------");
+    System.out.println(AccountService.groupByMonth(accounts));
+    System.out.println("---------------");
+    System.out.println(AccountService.findAverBalByCountry(accounts, "France"));
+    System.out.println("---------------");
+    System.out.println(AccountService.getFullNames(accountsLists));
+    System.out.println("---------------");
+    System.out.println(AccountService.getSortedByName(accounts));
+    System.out.println("---------------");
+    System.out.println(AccountService.getOldest(accounts));
+    System.out.println("---------------");
+    System.out.println(AccountService.getAverageBalanceByYearOfBirth(accounts));
+    System.out.println("---------------");
+    System.out.println(AccountService.getLongestLastName(accounts));
 
 
   }
