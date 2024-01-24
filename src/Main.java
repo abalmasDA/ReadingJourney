@@ -48,27 +48,29 @@ public class Main {
 
     List<List<Account>> accountsLists = List.of(accounts);
 
-    System.out.println(AccountService.findExceedingBalance(accounts, 500));
+    AccountService accountService = new AccountService();
+
+    System.out.println(accountService.findExceedingBalance(accounts, 500));
     System.out.println("---------------");
-    System.out.println(AccountService.findUniqueCountry(accounts));
+    System.out.println(accountService.findUniqueCountry(accounts));
     System.out.println("---------------");
-    System.out.println(AccountService.hasYoungerThan(accounts, 2000));
+    System.out.println(accountService.hasYoungerThan(accounts, 2000));
     System.out.println("---------------");
-    System.out.println(AccountService.findSumBalanceByGender(accounts));
+    System.out.println(accountService.findSumBalanceByGender(accounts));
     System.out.println("---------------");
-    System.out.println(AccountService.groupByMonth(accounts));
+    System.out.println(accountService.groupByMonth(accounts));
     System.out.println("---------------");
-    System.out.println(AccountService.findAverBalByCountry(accounts, "France"));
+    System.out.println(accountService.findAverBalByCountry(accounts, "France"));
     System.out.println("---------------");
-    System.out.println(AccountService.getFullNames(accountsLists));
+    System.out.println(accountService.getFullNames(accountsLists));
     System.out.println("---------------");
-    System.out.println(AccountService.getSortedByName(accounts));
+    System.out.println(accountService.getSortedByName(accounts));
     System.out.println("---------------");
-    System.out.println(AccountService.getOldest(accounts));
+    System.out.println(accountService.getOldest(accounts));
     System.out.println("---------------");
-    System.out.println(AccountService.getAverageBalanceByYearOfBirth(accounts));
+    System.out.println(accountService.getAverageBalanceByYearOfBirth(accounts));
     System.out.println("---------------");
-    System.out.println(AccountService.getLongestLastName(accounts));
+    System.out.println(accountService.getLongestLastName(accounts));
 
 
   }
