@@ -23,7 +23,7 @@ class AccountServiceTest {
   @BeforeEach
   public void setUp() {
     accountService = new AccountService();
-    accounts = List.of(new Account.Builder()
+    accounts = List.of(Account.builder()
             .country("Argentina")
             .lastName("Messi")
             .firstName("Lionel")
@@ -31,7 +31,7 @@ class AccountServiceTest {
             .balance(500)
             .gender(Gender.MALE)
             .build(),
-        new Account.Builder()
+        Account.builder()
             .country("England")
             .lastName("Henderson")
             .firstName("Gordan")
@@ -39,7 +39,7 @@ class AccountServiceTest {
             .balance(700)
             .gender(Gender.MALE)
             .build(),
-        new Account.Builder()
+        Account.builder()
             .country("USA")
             .lastName("Devise")
             .firstName("Ben")
@@ -47,7 +47,7 @@ class AccountServiceTest {
             .balance(600)
             .gender(Gender.MALE)
             .build(),
-        new Account.Builder()
+        Account.builder()
             .country("USA")
             .lastName("Devise")
             .firstName("Alfredo")
@@ -87,7 +87,7 @@ class AccountServiceTest {
   @Test
   void findSumBalanceByGenderTest() {
     double expected = 2500.0;
-    double result = accountService.findSumBalanceByGender(accounts);
+    double result = accountService.findSumBalanceByGender(accounts, Gender.MALE);
     assertThat(result).isNotNull();
     assertThat(result).isEqualTo(expected);
   }

@@ -1,3 +1,5 @@
+package service;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -5,10 +7,13 @@ import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.stream.Collectors;
+import model.Account;
+import model.Gender;
 
 public class AccountService {
 
-  public List<Account> findExceedingBalance(List<Account> accounts, int balance) {
+
+  public List<Account> findExceedingBalance(List<Account> accounts, double balance) {
     return accounts.stream()
         .filter(account -> account.getBalance() > balance)
         .toList();
@@ -21,14 +26,14 @@ public class AccountService {
         .collect(Collectors.toSet());
   }
 
-  public boolean hasYoungerThan(List<Account> accounts, int date) {
+  public boolean hasYoungerThan(List<Account> accounts, int year) {
     return accounts.stream()
-        .anyMatch(account -> account.getBirthday().getYear() > date);
+        .anyMatch(account -> account.getBirthday().getYear() > year);
   }
 
-  public double findSumBalanceByGender(List<Account> accounts) {
+  public double findSumBalanceByGender(List<Account> accounts, Gender gender) {
     return accounts.stream()
-        .filter(account -> Gender.MALE.equals(account.getGender()))
+        .filter(account -> gender.equals(account.getGender()))
         .mapToDouble(Account::getBalance)
         .sum();
   }
