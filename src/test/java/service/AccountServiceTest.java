@@ -17,8 +17,8 @@ import org.junit.jupiter.api.Test;
 
 class AccountServiceTest {
 
-  AccountService accountService;
-  List<Account> accounts;
+  private AccountService accountService;
+  private List<Account> accounts;
 
   @BeforeEach
   public void setUp() {
