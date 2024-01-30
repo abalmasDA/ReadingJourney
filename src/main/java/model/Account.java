@@ -10,7 +10,7 @@ public class Account {
 
   private String firstName;
   private String lastName;
-  private String country;
+  private Country country;
   private LocalDate birthday;
   private double balance;
   private Gender gender;
