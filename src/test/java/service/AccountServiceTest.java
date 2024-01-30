@@ -94,7 +94,6 @@ class AccountServiceTest {
         .hasMessage("Balance cannot be negative");
   }
 
-
   @Test
   void findUniqueCountrySingleValueTest() {
     int expected = 3;
