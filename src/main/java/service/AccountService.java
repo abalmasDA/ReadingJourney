@@ -8,8 +8,8 @@ import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.stream.Collectors;
 import model.Account;
-import model.Country;
-import model.Gender;
+import model.enums.Country;
+import model.enums.Gender;
 
 public class AccountService {
 
