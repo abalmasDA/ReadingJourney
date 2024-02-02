@@ -1,3 +1,5 @@
+package service;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -5,30 +7,38 @@ import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.stream.Collectors;
+import model.Account;
+import model.Country;
+import model.Gender;
 
 public class AccountService {
 
-  public List<Account> findExceedingBalance(List<Account> accounts, int balance) {
+  public List<Account> findExceedingBalance(List<Account> accounts, double balance) {
+    if (balance < 0) {
+      throw new IllegalArgumentException("Balance cannot be negative");
+    }
     return accounts.stream()
         .filter(account -> account.getBalance() > balance)
         .toList();
   }
 
-
-  public Set<String> findUniqueCountry(List<Account> accounts) {
+  public Set<Country> findUniqueCountry(List<Account> accounts) {
     return accounts.stream()
         .map(Account::getCountry)
         .collect(Collectors.toSet());
   }
 
-  public boolean hasYoungerThan(List<Account> accounts, int date) {
+  public boolean hasYoungerThan(List<Account> accounts, int year) {
+    if (year < 0) {
+      throw new IllegalArgumentException("Year cannot be negative");
+    }
     return accounts.stream()
-        .anyMatch(account -> account.getBirthday().getYear() > date);
+        .anyMatch(account -> account.getBirthday().getYear() > year);
   }
 
-  public double findSumBalanceByGender(List<Account> accounts) {
+  public double findSumBalanceByGender(List<Account> accounts, Gender gender) {
     return accounts.stream()
-        .filter(account -> Gender.MALE.equals(account.getGender()))
+        .filter(account -> gender.equals(account.getGender()))
         .mapToDouble(Account::getBalance)
         .sum();
   }
@@ -38,7 +48,10 @@ public class AccountService {
         .collect(Collectors.groupingBy(account -> account.getBirthday().getMonthValue()));
   }
 
-  public OptionalDouble findAverBalByCountry(List<Account> accounts, String country) {
+  public OptionalDouble findAverBalByCountry(List<Account> accounts, Country country) {
+    if (country == null) {
+      throw new IllegalArgumentException("Country parameter must not be null");
+    }
     return accounts.stream()
         .filter(account -> country.equals(account.getCountry()))
         .mapToDouble(Account::getBalance)
@@ -59,7 +72,6 @@ public class AccountService {
         .collect(Collectors.toList());
   }
 
-
   public Optional<Account> getOldest(List<Account> accounts) {
     return accounts.stream()
         .min(Comparator.comparing(Account::getBirthday));
@@ -73,11 +85,8 @@ public class AccountService {
         ));
   }
 
-
   public Optional<Account> getLongestLastName(List<Account> accounts) {
     return accounts.stream()
         .max(Comparator.comparingInt(account -> account.getLastName().length()));
   }
-
-
 }
