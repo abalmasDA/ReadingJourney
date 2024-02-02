@@ -1,4 +1,4 @@
-package model.enums;
+package com.abalmas.dmytro.model.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

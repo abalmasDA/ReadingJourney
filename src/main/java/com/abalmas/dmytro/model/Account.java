@@ -1,10 +1,10 @@
-package model;
+package com.abalmas.dmytro.model;
 
 import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Data;
-import model.enums.Country;
-import model.enums.Gender;
+import com.abalmas.dmytro.model.enums.Country;
+import com.abalmas.dmytro.model.enums.Gender;
 
 @Data
 @Builder
