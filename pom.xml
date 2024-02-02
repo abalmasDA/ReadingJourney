@@ -17,8 +17,27 @@
     <junit-jupiter-params.version>5.10.1</junit-jupiter-params.version>
     <assertj-core.version>3.25.1</assertj-core.version>
     <lombok.version>1.18.30</lombok.version>
+    <spring-webmvc.version>5.2.25.RELEASE</spring-webmvc.version>
+    <jackson-databind.version>2.16.1</jackson-databind.version>
+    <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
   </properties>
   <dependencies>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+      <version>${spring-webmvc.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>${javax.servlet-api.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson-databind.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
