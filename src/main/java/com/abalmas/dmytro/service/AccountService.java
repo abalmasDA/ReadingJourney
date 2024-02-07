@@ -46,48 +46,48 @@ public class AccountService {
     accountRepository.delete(id);
   }
 
-  public List<Account> findExceedingBalance(List<Account> accountEntities,
+  public List<Account> findExceedingBalance(List<Account> accounts,
       double balance) {
     if (balance < 0) {
       throw new IllegalArgumentException("Balance cannot be negative");
     }
-    return accountEntities.stream()
+    return accounts.stream()
         .filter(account -> account.getBalance() > balance)
         .toList();
   }
 
-  public Set<Country> findUniqueCountry(List<Account> accountEntities) {
-    return accountEntities.stream()
+  public Set<Country> findUniqueCountry(List<Account> accounts) {
+    return accounts.stream()
         .map(Account::getCountry)
         .collect(Collectors.toSet());
   }
 
-  public boolean hasYoungerThan(List<Account> accountEntities, int year) {
+  public boolean hasYoungerThan(List<Account> accounts, int year) {
     if (year < 0) {
       throw new IllegalArgumentException("Year cannot be negative");
     }
-    return accountEntities.stream()
+    return accounts.stream()
         .anyMatch(account -> account.getBirthday().getYear() > year);
   }
 
-  public double findSumBalanceByGender(List<Account> accountEntities, Gender gender) {
-    return accountEntities.stream()
+  public double findSumBalanceByGender(List<Account> accounts, Gender gender) {
+    return accounts.stream()
         .filter(account -> gender.equals(account.getGender()))
         .mapToDouble(Account::getBalance)
         .sum();
   }
 
-  public Map<Integer, List<Account>> groupByMonth(List<Account> accountEntities) {
-    return accountEntities.stream()
+  public Map<Integer, List<Account>> groupByMonth(List<Account> accounts) {
+    return accounts.stream()
         .collect(
             Collectors.groupingBy(account -> account.getBirthday().getMonthValue()));
   }
 
-  public OptionalDouble findAverBalByCountry(List<Account> accountEntities, Country country) {
+  public OptionalDouble findAverBalByCountry(List<Account> accounts, Country country) {
     if (country == null) {
       throw new IllegalArgumentException("Country parameter must not be null");
     }
-    return accountEntities.stream()
+    return accounts.stream()
         .filter(account -> country.equals(account.getCountry()))
         .mapToDouble(Account::getBalance)
         .average();
@@ -100,28 +100,28 @@ public class AccountService {
         .collect(Collectors.joining(", "));
   }
 
-  public List<Account> getSortedByName(List<Account> accountEntities) {
-    return accountEntities.stream()
+  public List<Account> getSortedByName(List<Account> accounts) {
+    return accounts.stream()
         .sorted(Comparator.comparing(Account::getLastName)
             .thenComparing(Account::getFirstName))
         .collect(Collectors.toList());
   }
 
-  public Optional<Account> getOldest(List<Account> accountEntities) {
-    return accountEntities.stream()
+  public Optional<Account> getOldest(List<Account> accounts) {
+    return accounts.stream()
         .min(Comparator.comparing(Account::getBirthday));
   }
 
-  public Map<Integer, Double> getAverageBalanceByYearOfBirth(List<Account> accountEntities) {
-    return accountEntities.stream()
+  public Map<Integer, Double> getAverageBalanceByYearOfBirth(List<Account> accounts) {
+    return accounts.stream()
         .collect(Collectors.groupingBy(
             account -> account.getBirthday().getYear(),
             Collectors.averagingDouble(Account::getBalance)
         ));
   }
 
-  public Optional<Account> getLongestLastName(List<Account> accountEntities) {
-    return accountEntities.stream()
+  public Optional<Account> getLongestLastName(List<Account> accounts) {
+    return accounts.stream()
         .max(Comparator.comparingInt(account -> account.getLastName().length()));
   }
 }

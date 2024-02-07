@@ -58,8 +58,8 @@ public class accountController {
 
   @PostMapping("/accounts/{balance}")
   public List<Account> findExceedingBalance(@PathVariable("balance") double balance,
-      @RequestBody List<Account> accountEntities) {
-    return accountService.findExceedingBalance(accountEntities, balance);
+      @RequestBody List<Account> account) {
+    return accountService.findExceedingBalance(account, balance);
   }
 
 }
