@@ -1,5 +1,6 @@
 package com.abalmas.dmytro.service;
 
+import com.abalmas.dmytro.exception.AccountNotFoundException;
 import com.abalmas.dmytro.model.Entity.Account;
 import com.abalmas.dmytro.model.enums.Country;
 import com.abalmas.dmytro.model.enums.Gender;
@@ -29,7 +30,8 @@ public class AccountService {
   }
 
   public Optional<Account> findById(int id) {
-    return accountRepository.findById(id);
+    return Optional.ofNullable(accountRepository.findById(id)
+        .orElseThrow(() -> new AccountNotFoundException("Account not found")));
   }
 
   public Account add(Account account) {
