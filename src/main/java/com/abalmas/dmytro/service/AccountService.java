@@ -1,5 +1,8 @@
-package service;
+package com.abalmas.dmytro.service;
 
+import com.abalmas.dmytro.model.Account;
+import com.abalmas.dmytro.model.enums.Country;
+import com.abalmas.dmytro.model.enums.Gender;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -7,10 +10,9 @@ import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.stream.Collectors;
-import model.Account;
-import model.Country;
-import model.Gender;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AccountService {
 
   public List<Account> findExceedingBalance(List<Account> accounts, double balance) {
