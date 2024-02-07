@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
-public class accountController {
+public class AccountController {
 
   private final AccountService accountService;
 
   @Autowired
-  public accountController(AccountService accountService) {
+  public AccountController(AccountService accountService) {
     this.accountService = accountService;
   }
 
