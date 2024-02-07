@@ -22,7 +22,8 @@
     <jackson-databind.version>2.16.1</jackson-databind.version>
     <jakarta.servlet-api.version>5.0.0</jakarta.servlet-api.version>
     <jackson-datatype-jsr310.version>2.16.1</jackson-datatype-jsr310.version>
-    <mapstruct.version>1.5.5.Final</mapstruct.version>
+    <jackson-datatype-jdk8.version>2.16.1</jackson-datatype-jdk8.version>
+
   </properties>
   <dependencies>
     <dependency>
@@ -45,6 +46,11 @@
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jsr310</artifactId>
       <version>${jackson-datatype-jsr310.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jdk8</artifactId>
+      <version>${jackson-datatype-jdk8.version}</version>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -80,12 +86,6 @@
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-war-plugin</artifactId>
       <version>3.4.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.mapstruct</groupId>
-      <artifactId>mapstruct</artifactId>
-      <version>${mapstruct.version}</version>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
   <build>
