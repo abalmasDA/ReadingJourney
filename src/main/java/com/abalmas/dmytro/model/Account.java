@@ -1,4 +1,4 @@
-package com.abalmas.dmytro.model.Entity;
+package com.abalmas.dmytro.model;
 
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Account {
 
-  private int id;
+  private long id;
   private String firstName;
   private String lastName;
   private Country country;

@@ -1,10 +1,10 @@
 package com.abalmas.dmytro.service;
 
 import com.abalmas.dmytro.exception.AccountNotFoundException;
-import com.abalmas.dmytro.model.Entity.Account;
+import com.abalmas.dmytro.model.Account;
 import com.abalmas.dmytro.model.enums.Country;
 import com.abalmas.dmytro.model.enums.Gender;
-import com.abalmas.dmytro.repository.AccountRepositoryImpl;
+import com.abalmas.dmytro.repository.AccountRepository;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -12,16 +12,15 @@ import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AccountService {
 
-  private final AccountRepositoryImpl accountRepository;
+  private final AccountRepository accountRepository;
 
-  @Autowired
-  public AccountService(AccountRepositoryImpl accountRepository) {
+
+  public AccountService(AccountRepository accountRepository) {
     this.accountRepository = accountRepository;
   }
 
@@ -29,20 +28,19 @@ public class AccountService {
     return accountRepository.findAll();
   }
 
-  public Optional<Account> findById(int id) {
-    return Optional.ofNullable(accountRepository.findById(id)
-        .orElseThrow(() -> new AccountNotFoundException("Account not found")));
+  public Optional <Account> findById(long id) {
+    return accountRepository.findById(id);
   }
 
   public Account add(Account account) {
     return accountRepository.add(account);
   }
 
-  public Account update(int id, Account account) {
+  public Account update(long id, Account account) {
     return accountRepository.update(id, account);
   }
 
-  public void delete(int id) {
+  public void delete(long id) {
     accountRepository.delete(id);
   }
 
@@ -62,7 +60,7 @@ public class AccountService {
         .collect(Collectors.toSet());
   }
 
-  public boolean hasYoungerThan(List<Account> accounts, int year) {
+  public boolean hasYoungerThan(List<Account> accounts, long year) {
     if (year < 0) {
       throw new IllegalArgumentException("Year cannot be negative");
     }

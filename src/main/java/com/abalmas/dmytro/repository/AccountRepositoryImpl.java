@@ -1,6 +1,7 @@
 package com.abalmas.dmytro.repository;
 
-import com.abalmas.dmytro.model.Entity.Account;
+import com.abalmas.dmytro.exception.AccountNotFoundException;
+import com.abalmas.dmytro.model.Account;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +19,14 @@ public class AccountRepositoryImpl implements AccountRepository {
   }
 
   @Override
-  public Optional<Account> findById(int id) {
-    return accounts.stream()
-        .filter(account -> account.getId() == id)
+  public Optional<Account> findById(long id) {
+    Optional<Account> account = accounts.stream()
+        .filter(a -> a.getId() == id)
         .findFirst();
+    if (!account.isPresent()) {
+      throw new AccountNotFoundException("Account not found");
+    }
+    return account;
   }
 
   @Override
@@ -31,7 +36,7 @@ public class AccountRepositoryImpl implements AccountRepository {
   }
 
   @Override
-  public Account update(int id, Account accountToUpdate) {
+  public Account update(long id, Account accountToUpdate) {
     Optional<Account> possibleAccount = findById(id);
     return possibleAccount.map(account -> {
       account.setFirstName(accountToUpdate.getFirstName());
@@ -44,7 +49,7 @@ public class AccountRepositoryImpl implements AccountRepository {
   }
 
   @Override
-  public void delete(int id) {
+  public void delete(long id) {
     Optional<Account> account = findById(id);
     account.ifPresent(accounts::remove);
   }

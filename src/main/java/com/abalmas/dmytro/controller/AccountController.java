@@ -1,10 +1,9 @@
 package com.abalmas.dmytro.controller;
 
-import com.abalmas.dmytro.model.Entity.Account;
+import com.abalmas.dmytro.model.Account;
 import com.abalmas.dmytro.service.AccountService;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +19,7 @@ public class AccountController {
 
   private final AccountService accountService;
 
-  @Autowired
+
   public AccountController(AccountService accountService) {
     this.accountService = accountService;
   }
@@ -32,7 +31,7 @@ public class AccountController {
   }
 
   @GetMapping("/accounts/{id}")
-  public Optional<Account> findById(@PathVariable("id") int id) {
+  public Optional <Account> findById(@PathVariable("id") long id) {
     return accountService.findById(id);
   }
 
@@ -42,12 +41,12 @@ public class AccountController {
   }
 
   @PutMapping("/accounts/{id}")
-  public Account update(@PathVariable("id") int id, @RequestBody Account account) {
+  public Account update(@PathVariable("id") long id, @RequestBody Account account) {
     return accountService.update(id, account);
   }
 
   @DeleteMapping("/accounts/{id}")
-  public void delete(@PathVariable("id") int id) {
+  public void delete(@PathVariable("id") long id) {
     accountService.delete(id);
   }
 
