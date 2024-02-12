@@ -20,14 +20,11 @@ public class AccountRepositoryImpl implements AccountRepository {
 
   @Override
   public Optional<Account> findById(long id) {
-    Optional<Account> account = accounts.stream()
+    return accounts.stream()
         .filter(a -> a.getId() == id)
         .findFirst();
-    if (!account.isPresent()) {
-      throw new AccountNotFoundException("Account not found");
-    }
-    return account;
   }
+
 
   @Override
   public Account add(Account account) {
@@ -45,7 +42,7 @@ public class AccountRepositoryImpl implements AccountRepository {
       account.setBirthday(accountToUpdate.getBirthday());
       account.setGender(accountToUpdate.getGender());
       return account;
-    }).orElse(null);
+    }).orElseThrow(() -> new AccountNotFoundException("Account not found"));
   }
 
   @Override

@@ -29,7 +29,8 @@ public class AccountService {
   }
 
   public Optional <Account> findById(long id) {
-    return accountRepository.findById(id);
+    return Optional.ofNullable(accountRepository.findById(id)
+        .orElseThrow(() -> new AccountNotFoundException("Account not found")));
   }
 
   public Account add(Account account) {
