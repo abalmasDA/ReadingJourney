@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Account {
 
+  private long id;
   private String firstName;
   private String lastName;
   private Country country;

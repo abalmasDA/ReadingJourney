@@ -22,6 +22,8 @@
     <jackson-databind.version>2.16.1</jackson-databind.version>
     <jakarta.servlet-api.version>5.0.0</jakarta.servlet-api.version>
     <jackson-datatype-jsr310.version>2.16.1</jackson-datatype-jsr310.version>
+    <jackson-datatype-jdk8.version>2.16.1</jackson-datatype-jdk8.version>
+
   </properties>
   <dependencies>
     <dependency>
@@ -44,6 +46,11 @@
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jsr310</artifactId>
       <version>${jackson-datatype-jsr310.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jdk8</artifactId>
+      <version>${jackson-datatype-jdk8.version}</version>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
