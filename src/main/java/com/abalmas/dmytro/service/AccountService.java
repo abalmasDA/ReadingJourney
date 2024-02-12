@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,8 +20,8 @@ public class AccountService {
 
   private final AccountRepository accountRepository;
 
-
-  public AccountService(AccountRepository accountRepository) {
+  public AccountService(
+      @Qualifier("accountRepositoryHiberImpl") AccountRepository accountRepository) {
     this.accountRepository = accountRepository;
   }
 
@@ -28,7 +29,7 @@ public class AccountService {
     return accountRepository.findAll();
   }
 
-  public Optional <Account> findById(long id) {
+  public Optional<Account> findById(long id) {
     return Optional.ofNullable(accountRepository.findById(id)
         .orElseThrow(() -> new AccountNotFoundException("Account not found")));
   }
