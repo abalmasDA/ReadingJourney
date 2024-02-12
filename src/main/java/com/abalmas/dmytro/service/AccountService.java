@@ -1,8 +1,10 @@
 package com.abalmas.dmytro.service;
 
+import com.abalmas.dmytro.exception.AccountNotFoundException;
 import com.abalmas.dmytro.model.Account;
 import com.abalmas.dmytro.model.enums.Country;
 import com.abalmas.dmytro.model.enums.Gender;
+import com.abalmas.dmytro.repository.AccountRepository;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -10,12 +12,42 @@ import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AccountService {
 
-  public List<Account> findExceedingBalance(List<Account> accounts, double balance) {
+  private final AccountRepository accountRepository;
+
+  public AccountService(
+      @Qualifier("accountRepositoryHiberImpl") AccountRepository accountRepository) {
+    this.accountRepository = accountRepository;
+  }
+
+  public List<Account> findAll() {
+    return accountRepository.findAll();
+  }
+
+  public Optional<Account> findById(long id) {
+    return Optional.ofNullable(accountRepository.findById(id)
+        .orElseThrow(() -> new AccountNotFoundException("Account not found")));
+  }
+
+  public Account add(Account account) {
+    return accountRepository.add(account);
+  }
+
+  public Account update(long id, Account account) {
+    return accountRepository.update(id, account);
+  }
+
+  public void delete(long id) {
+    accountRepository.delete(id);
+  }
+
+  public List<Account> findExceedingBalance(List<Account> accounts,
+      double balance) {
     if (balance < 0) {
       throw new IllegalArgumentException("Balance cannot be negative");
     }
@@ -30,7 +62,7 @@ public class AccountService {
         .collect(Collectors.toSet());
   }
 
-  public boolean hasYoungerThan(List<Account> accounts, int year) {
+  public boolean hasYoungerThan(List<Account> accounts, long year) {
     if (year < 0) {
       throw new IllegalArgumentException("Year cannot be negative");
     }
@@ -47,7 +79,8 @@ public class AccountService {
 
   public Map<Integer, List<Account>> groupByMonth(List<Account> accounts) {
     return accounts.stream()
-        .collect(Collectors.groupingBy(account -> account.getBirthday().getMonthValue()));
+        .collect(
+            Collectors.groupingBy(account -> account.getBirthday().getMonthValue()));
   }
 
   public OptionalDouble findAverBalByCountry(List<Account> accounts, Country country) {

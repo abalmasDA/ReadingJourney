@@ -2,6 +2,7 @@ package com.abalmas.dmytro.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import java.util.Properties;
 import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
@@ -17,10 +18,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration
 @ComponentScan(value = "com.abalmas.dmytro")
 @EnableWebMvc
-@PropertySource("classpath:db.properties")
+@PropertySource("classpath:application.properties")
 public class AppConfig {
 
-  private Environment environment;
+  private final Environment environment;
 
   public AppConfig(Environment environment) {
     this.environment = environment;
@@ -32,7 +33,8 @@ public class AppConfig {
     properties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
     properties.put("hibernate.default_schema",
         environment.getRequiredProperty("hibernate.default_schema"));
-    properties.put("hibernate.hbm2ddl.auto", "update");
+    properties.put("hibernate.hbm2ddl.auto",
+        environment.getRequiredProperty("hibernate.hbm2ddl.auto"));
     return properties;
   }
 
@@ -55,11 +57,11 @@ public class AppConfig {
     return sessionFactory;
   }
 
-
   @Bean
   public ObjectMapper objectMapper() {
     ObjectMapper mapper = new ObjectMapper();
     mapper.registerModule(new JavaTimeModule());
+    mapper.registerModule(new Jdk8Module());
     return mapper;
   }
 
@@ -70,6 +72,4 @@ public class AppConfig {
     converter.setObjectMapper(objectMapper);
     return converter;
   }
-
-
 }
