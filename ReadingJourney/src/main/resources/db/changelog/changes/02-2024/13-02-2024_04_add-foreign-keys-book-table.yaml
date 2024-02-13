@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: 13-02-2024_04_add-foreign-keys-book-table
+      author: Dmytro Abalmas
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: author_id
+            baseTableName: book
+            constraintName: fk_book_author
+            referencedColumnNames: id
+            referencedTableName: author
+        - addForeignKeyConstraint:
+            baseColumnNames: book_details_id
+            baseTableName: book
+            constraintName: fk_book_book_details
+            referencedColumnNames: id
+            referencedTableName: book_details
