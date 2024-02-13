@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: 13-02-2024_001_create-table-book-details
+      author: Dmytro Abalmas
+      changes:
+        - createTable:
+            tableName: book_details
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: year_publication
+                  type: date
+              - column:
+                  name: number_pages
+                  type: int
+              - column:
+                  name: genre
+                  type: varchar(255)
+              - column:
+                  name: format
+                  type: varchar(255)
+              - column:
+                  name: edition
+                  type: varchar(255)
+              - column:
+                  name: isbn
+                  type: bigint
