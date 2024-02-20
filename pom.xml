@@ -9,6 +9,7 @@
   <packaging>pom</packaging>
   <modules>
     <module>ReadingJourney</module>
+    <module>CustomBean</module>
   </modules>
   <properties>
     <maven.compiler.source>21</maven.compiler.source>
