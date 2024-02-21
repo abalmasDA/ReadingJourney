@@ -1,4 +1,4 @@
-package com.readingjourney.entity;
+package com.readingjourney.book.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
