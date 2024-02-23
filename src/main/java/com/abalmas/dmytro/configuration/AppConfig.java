@@ -53,7 +53,7 @@ public class AppConfig {
     LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
     sessionFactory.setDataSource(dataSource());
     sessionFactory.setHibernateProperties(hibernateProperties());
-    sessionFactory.setPackagesToScan("com.abalmas.dmytro");
+    sessionFactory.setPackagesToScan("main.java.com.abalmas.dmytro");
     return sessionFactory;
   }
 
