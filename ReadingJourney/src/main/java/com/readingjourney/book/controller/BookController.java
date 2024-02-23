@@ -2,6 +2,7 @@ package com.readingjourney.book.controller;
 
 import com.readingjourney.book.dto.BookDto;
 import com.readingjourney.book.entity.Book;
+import com.readingjourney.book.service.BookService;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,12 +25,12 @@ public class BookController {
   }
 
   @GetMapping
-  public List<Book> getAll() {
+  public List<Book> findAll() {
     return bookService.findAll();
   }
 
   @GetMapping("/{id}")
-  public Optional<Book> getById(@PathVariable long id) {
+  public Optional<Book> findById(@PathVariable long id) {
     return bookService.findById(id);
   }
 
