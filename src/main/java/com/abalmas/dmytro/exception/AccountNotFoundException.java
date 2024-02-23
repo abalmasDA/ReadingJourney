@@ -1,4 +1,4 @@
-package com.abalmas.dmytro.exception;
+package main.java.com.abalmas.dmytro.exception;
 
 public class AccountNotFoundException extends RuntimeException {
 

@@ -1,10 +1,6 @@
-package com.abalmas.dmytro.service;
+package main.java.com.abalmas.dmytro.service;
 
-import com.abalmas.dmytro.exception.AccountNotFoundException;
-import com.abalmas.dmytro.model.Account;
-import com.abalmas.dmytro.model.enums.Country;
-import com.abalmas.dmytro.model.enums.Gender;
-import com.abalmas.dmytro.repository.AccountRepository;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +8,11 @@ import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.stream.Collectors;
+import main.java.com.abalmas.dmytro.exception.AccountNotFoundException;
+import main.java.com.abalmas.dmytro.model.Account;
+import main.java.com.abalmas.dmytro.model.enums.Country;
+import main.java.com.abalmas.dmytro.model.enums.Gender;
+import main.java.com.abalmas.dmytro.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.abalmas.dmytro.configuration;
+package main.java.com.abalmas.dmytro.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -16,7 +16,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
-@ComponentScan(value = "com.abalmas.dmytro")
+@ComponentScan(value = "main.java.com.abalmas.dmytro")
 @EnableWebMvc
 @PropertySource("classpath:application.properties")
 public class AppConfig {

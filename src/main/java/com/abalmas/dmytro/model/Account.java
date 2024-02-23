@@ -1,4 +1,4 @@
-package com.abalmas.dmytro.model;
+package main.java.com.abalmas.dmytro.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,9 +12,9 @@ import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import com.abalmas.dmytro.model.enums.Country;
-import com.abalmas.dmytro.model.enums.Gender;
 import lombok.NoArgsConstructor;
+import main.java.com.abalmas.dmytro.model.enums.Country;
+import main.java.com.abalmas.dmytro.model.enums.Gender;
 
 @Entity
 @Table(name = "accounts")

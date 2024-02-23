@@ -1,9 +1,10 @@
-package com.abalmas.dmytro.controller;
+package main.java.com.abalmas.dmytro.controller;
 
-import com.abalmas.dmytro.model.Account;
-import com.abalmas.dmytro.service.AccountService;
+
 import java.util.List;
 import java.util.Optional;
+import main.java.com.abalmas.dmytro.model.Account;
+import main.java.com.abalmas.dmytro.service.AccountService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +32,7 @@ public class AccountController {
   }
 
   @GetMapping("/accounts/{id}")
-  public Optional <Account> findById(@PathVariable("id") long id) {
+  public Optional<Account> findById(@PathVariable("id") long id) {
     return accountService.findById(id);
   }
 

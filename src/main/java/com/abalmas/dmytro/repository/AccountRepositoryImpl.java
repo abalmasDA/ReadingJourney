@@ -1,11 +1,11 @@
-package com.abalmas.dmytro.repository;
+package main.java.com.abalmas.dmytro.repository;
 
-import com.abalmas.dmytro.exception.AccountNotFoundException;
-import com.abalmas.dmytro.model.Account;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import main.java.com.abalmas.dmytro.exception.AccountNotFoundException;
+import main.java.com.abalmas.dmytro.model.Account;
 import org.springframework.stereotype.Repository;
 
 @Repository

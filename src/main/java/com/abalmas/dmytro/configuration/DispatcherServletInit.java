@@ -1,4 +1,4 @@
-package com.abalmas.dmytro.configuration;
+package main.java.com.abalmas.dmytro.configuration;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 

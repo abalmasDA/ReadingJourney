@@ -1,14 +1,14 @@
-package com.abalmas.dmytro.repository;
+package main.java.com.abalmas.dmytro.repository;
 
-import com.abalmas.dmytro.model.Account;
 import java.util.List;
 import java.util.Optional;
+import main.java.com.abalmas.dmytro.model.Account;
 
 public interface AccountRepository {
 
   List<Account> findAll();
 
-  Optional <Account> findById(long id);
+  Optional<Account> findById(long id);
 
   Account add(Account account);
 
