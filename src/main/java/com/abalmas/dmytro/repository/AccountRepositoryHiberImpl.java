@@ -1,7 +1,6 @@
 package com.abalmas.dmytro.repository;
 
 import com.abalmas.dmytro.exception.AccountNotFoundException;
-import com.abalmas.dmytro.repository.AccountRepository;
 import com.abalmas.dmytro.model.Account;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

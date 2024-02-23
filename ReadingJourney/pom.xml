@@ -11,6 +11,8 @@
 
   <groupId>com.readinglourney</groupId>
   <artifactId>ReadingJourney</artifactId>
+  <packaging>war</packaging>
+
 
   <properties>
     <maven.compiler.source>21</maven.compiler.source>

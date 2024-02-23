@@ -11,6 +11,8 @@
 
   <groupId>org.example</groupId>
   <artifactId>CustomBean</artifactId>
+  <packaging>war</packaging>
+
 
   <properties>
     <maven.compiler.source>21</maven.compiler.source>
