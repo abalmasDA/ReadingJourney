@@ -4,7 +4,9 @@ import jakarta.persistence.EntityManagerFactory;
 import java.util.Properties;
 import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -13,10 +15,14 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
-@EnableTransactionManagement
+@EnableWebMvc
+@ComponentScan(value = "com.readingjourney")
+@PropertySource("classpath:application.properties")
 @EnableJpaRepositories(basePackages = "com.readingjourney.book.repository")
+@EnableTransactionManagement
 public class ApplicationConfiguration {
 
   private final Environment environment;
@@ -54,7 +60,7 @@ public class ApplicationConfiguration {
   public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
     LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
     localContainerEntityManagerFactoryBean.setDataSource(dataSource());
-    localContainerEntityManagerFactoryBean.setPackagesToScan("com.readingjourney");
+    localContainerEntityManagerFactoryBean.setPackagesToScan("com.readingjourney.book.entity");
     localContainerEntityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter());
     localContainerEntityManagerFactoryBean.setJpaProperties(hibernateProperties());
     return localContainerEntityManagerFactoryBean;

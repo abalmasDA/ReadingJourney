@@ -1,6 +1,7 @@
 package com.readingjourney.book.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.Set;
@@ -30,6 +31,6 @@ public class Author {
   @Column(name = "last_name", length = 100, nullable = false)
   private String lastName;
 
-  @OneToMany(mappedBy = "author")
+  @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
   private Set<Book> books;
 }
