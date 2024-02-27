@@ -1,6 +1,7 @@
 package com.readingjourney.book.service;
 
 import com.readingjourney.book.dto.BookDto;
+import com.readingjourney.book.entity.Author;
 import com.readingjourney.book.entity.Book;
 import com.readingjourney.book.exception.AuthorNotFoundException;
 import com.readingjourney.book.exception.BookNotFoundException;
@@ -46,12 +47,14 @@ public class BookService {
    * @return the saved book
    */
   public Book save(long authorId, BookDto bookDto) {
-    return authorRepository.findById(authorId).map(author -> {
-      Book book = bookMapper.toEntity(bookDto);
-      book.setAuthor(author);
-      return bookRepository.save(book);
-    }).orElseThrow(() -> new AuthorNotFoundException("Author with id " + authorId + " not found"));
+    Author author = authorRepository.findById(authorId)
+        .orElseThrow(
+            () -> new AuthorNotFoundException("Author with id " + authorId + " not found"));
+    Book book = bookMapper.toEntity(bookDto);
+    book.setAuthor(author);
+    return bookRepository.save(book);
   }
+
 
   /**
    * Updates a book with the given id using the information from the provided BookDto.
