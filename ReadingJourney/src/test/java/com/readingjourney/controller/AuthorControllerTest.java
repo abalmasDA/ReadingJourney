@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Collections;
 import java.util.Optional;
-import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -44,16 +44,14 @@ public class AuthorControllerTest {
   @Mock
   private AuthorService authorService;
 
-  @Mock
-  private Validator validator;
-
   @InjectMocks
   private AuthorController authorController;
 
   @BeforeEach
   public void setUp() {
     MockitoAnnotations.openMocks(this);
-    mockMvc = MockMvcBuilders.standaloneSetup(authorController).setValidator(validator)
+    mockMvc = MockMvcBuilders.standaloneSetup(authorController)
+        .setValidator(new LocalValidatorFactoryBean())
         .setControllerAdvice(new GlobalExceptionHandler()).build();
   }
 
@@ -102,7 +100,7 @@ public class AuthorControllerTest {
     mockMvc.perform(MockMvcRequestBuilders.post("/authors")
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestBody))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest()); // the test always returns code 200
+        .andExpect(status().isBadRequest());
   }
 
   @Test
@@ -134,7 +132,8 @@ public class AuthorControllerTest {
     String requestBody = "{\"name\":\"\"}";
     mockMvc.perform(MockMvcRequestBuilders.put("/authors/{id}", id)
         .contentType(MediaType.APPLICATION_JSON)
-        .content(requestBody)).andExpect(MockMvcResultMatchers.status().isBadRequest()); // the test always returns code 200
+        .content(requestBody)).andExpect(
+        MockMvcResultMatchers.status().isBadRequest()); // the test always returns code 200
   }
 
   @Test
