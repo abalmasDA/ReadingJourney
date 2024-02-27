@@ -30,7 +30,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -46,16 +46,14 @@ public class BookControllerTest {
   @Mock
   private BookService bookService;
 
-  @Mock
-  private Validator validator;
-
   @InjectMocks
   private BookController bookController;
 
   @BeforeEach
   public void setUp() {
     MockitoAnnotations.openMocks(this);
-    mockMvc = MockMvcBuilders.standaloneSetup(bookController).setValidator(validator)
+    mockMvc = MockMvcBuilders.standaloneSetup(bookController)
+        .setValidator(new LocalValidatorFactoryBean())
         .setControllerAdvice(new GlobalExceptionHandler()).build();
   }
 
