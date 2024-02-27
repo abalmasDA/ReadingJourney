@@ -102,7 +102,7 @@ public class AuthorControllerTest {
     mockMvc.perform(MockMvcRequestBuilders.post("/authors")
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestBody))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        .andExpect(MockMvcResultMatchers.status().isBadRequest()); // the test always returns code 200
   }
 
   @Test
@@ -134,7 +134,7 @@ public class AuthorControllerTest {
     String requestBody = "{\"name\":\"\"}";
     mockMvc.perform(MockMvcRequestBuilders.put("/authors/{id}", id)
         .contentType(MediaType.APPLICATION_JSON)
-        .content(requestBody)).andExpect(MockMvcResultMatchers.status().isBadRequest());
+        .content(requestBody)).andExpect(MockMvcResultMatchers.status().isBadRequest()); // the test always returns code 200
   }
 
   @Test
