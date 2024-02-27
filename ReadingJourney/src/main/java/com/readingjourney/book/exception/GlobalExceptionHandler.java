@@ -51,6 +51,7 @@ public class GlobalExceptionHandler {
    * @param ex the exception that was thrown
    * @return a ResponseEntity containing the validation errors and status code
    */
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
     Map<String, String> errors = new HashMap<>();
