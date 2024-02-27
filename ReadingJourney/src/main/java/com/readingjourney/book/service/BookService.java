@@ -49,8 +49,7 @@ public class BookService {
     return authorRepository.findById(authorId).map(author -> {
       Book book = bookMapper.toEntity(bookDto);
       book.setAuthor(author);
-      bookRepository.save(book);
-      return book;
+      return bookRepository.save(book);
     }).orElseThrow(() -> new AuthorNotFoundException("Author with id " + authorId + " not found"));
   }
 
