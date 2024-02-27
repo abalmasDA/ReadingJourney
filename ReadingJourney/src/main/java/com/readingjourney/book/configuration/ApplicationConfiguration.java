@@ -22,9 +22,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan(value = "com.readingjourney")
+@ComponentScan(value = {"com.readingjourney.book", "com.readingjourney.account"})
 @PropertySource("classpath:application.properties")
-@EnableJpaRepositories(basePackages = "com.readingjourney")
+@EnableJpaRepositories(basePackages = {"com.readingjourney.book.repository",
+    "com.readingjourney.account.repository"})
 @EnableTransactionManagement
 public class ApplicationConfiguration {
 
@@ -83,7 +84,8 @@ public class ApplicationConfiguration {
     LocalContainerEntityManagerFactoryBean localContainerEntity =
         new LocalContainerEntityManagerFactoryBean();
     localContainerEntity.setDataSource(dataSource());
-    localContainerEntity.setPackagesToScan("com.readingjourney.book.entity");
+    localContainerEntity.setPackagesToScan("com.readingjourney.book.entity",
+        "com.readingjourney.account.entity");
     localContainerEntity.setJpaVendorAdapter(vendorAdapter());
     localContainerEntity.setJpaProperties(hibernateProperties());
     return localContainerEntity;
