@@ -17,6 +17,9 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+/**
+ * The type Application configuration.
+ */
 @Configuration
 @EnableWebMvc
 @ComponentScan(value = "com.readingjourney")
@@ -33,8 +36,10 @@ public class ApplicationConfiguration {
 
   private Properties hibernateProperties() {
     Properties properties = new Properties();
-    properties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
-    properties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
+    properties.put("hibernate.dialect",
+        environment.getRequiredProperty("hibernate.dialect"));
+    properties.put("hibernate.show_sql",
+        environment.getRequiredProperty("hibernate.show_sql"));
     properties.put("hibernate.default_schema",
         environment.getRequiredProperty("hibernate.default_schema"));
     properties.put("hibernate.hbm2ddl.auto",
@@ -42,6 +47,12 @@ public class ApplicationConfiguration {
     return properties;
   }
 
+  /**
+   * Creates and configures a DataSource bean for the application, using the properties defined in
+   * the environment.
+   *
+   * @return the configured DataSource bean
+   */
   @Bean
   public DataSource dataSource() {
     DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -52,20 +63,39 @@ public class ApplicationConfiguration {
     return dataSource;
   }
 
+  /**
+   * A function that returns a new HibernateJpaVendorAdapter instance.
+   *
+   * @return a new HibernateJpaVendorAdapter instance
+   */
   public HibernateJpaVendorAdapter vendorAdapter() {
     return new HibernateJpaVendorAdapter();
   }
 
+  /**
+   * Creates and configures a LocalContainerEntityManagerFactoryBean for the application, using the
+   * configured DataSource, entity package to scan, JPA vendor adapter, and Hibernate properties.
+   *
+   * @return the configured LocalContainerEntityManagerFactoryBean
+   */
   @Bean
   public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-    LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
-    localContainerEntityManagerFactoryBean.setDataSource(dataSource());
-    localContainerEntityManagerFactoryBean.setPackagesToScan("com.readingjourney.book.entity");
-    localContainerEntityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter());
-    localContainerEntityManagerFactoryBean.setJpaProperties(hibernateProperties());
-    return localContainerEntityManagerFactoryBean;
+    LocalContainerEntityManagerFactoryBean localContainerEntity =
+        new LocalContainerEntityManagerFactoryBean();
+    localContainerEntity.setDataSource(dataSource());
+    localContainerEntity.setPackagesToScan("com.readingjourney.book.entity");
+    localContainerEntity.setJpaVendorAdapter(vendorAdapter());
+    localContainerEntity.setJpaProperties(hibernateProperties());
+    return localContainerEntity;
   }
 
+  /**
+   * Creates and configures a JpaTransactionManager bean for managing JPA transactions using the
+   * specified EntityManagerFactory.
+   *
+   * @param entityManagerFactory the EntityManagerFactory used for the transactions
+   * @return the configured JpaTransactionManager bean
+   */
   @Bean
   public JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
     JpaTransactionManager transactionManager = new JpaTransactionManager();

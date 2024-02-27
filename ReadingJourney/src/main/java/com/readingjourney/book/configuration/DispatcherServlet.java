@@ -2,6 +2,10 @@ package com.readingjourney.book.configuration;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+/**
+ * Initializes the DispatcherServlet and specifies the ApplicationConfiguration class as the root
+ * configuration. This class is used to configure the Servlet Context for the application.
+ */
 public class DispatcherServlet extends AbstractAnnotationConfigDispatcherServletInitializer {
 
   @Override

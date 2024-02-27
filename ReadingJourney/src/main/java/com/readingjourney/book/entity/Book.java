@@ -1,6 +1,6 @@
 package com.readingjourney.book.entity;
 
-import jakarta.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,8 +8,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,12 +31,27 @@ public class Book {
   @Column(name = "rating", nullable = false)
   private Long rating;
 
-  @ManyToOne
-  @JoinColumn(name = "author_id", nullable = false)
-  private Author author;
+  @Column(name = "year_publication", nullable = false)
+  private LocalDate yearPublication;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "book_details_id", unique = true, nullable = false)
-  private BookDetails bookDetails;
+  @Column(name = "number_pages", nullable = false)
+  private Integer numberPages;
+
+  @Column(name = "genre", length = 100, nullable = false)
+  private String genre;
+
+  @Column(name = "format", length = 100, nullable = false)
+  private String format;
+
+  @Column(name = "edition", length = 100, nullable = false)
+  private String edition;
+
+  @Column(name = "isbn", nullable = false)
+  private Long isbn;
+
+  @JsonBackReference
+  @ManyToOne
+  @JoinColumn(name = "author_id", referencedColumnName = "id", nullable = false)
+  private Author author;
 
 }

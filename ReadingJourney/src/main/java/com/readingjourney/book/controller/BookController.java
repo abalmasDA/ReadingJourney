@@ -3,6 +3,7 @@ package com.readingjourney.book.controller;
 import com.readingjourney.book.dto.BookDto;
 import com.readingjourney.book.entity.Book;
 import com.readingjourney.book.service.BookService;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * REST controller for managing books. This controller provides endpoints for retrieving, adding,
+ * updating, and deleting books.
+ */
 @RestController
 @RequestMapping("/books")
 public class BookController {
@@ -34,13 +39,13 @@ public class BookController {
     return bookService.findById(id);
   }
 
-  @PostMapping()
-  public Book add(@RequestBody BookDto bookDto) {
-    return bookService.add(bookDto);
+  @PostMapping("/{id}")
+  public Book add(@PathVariable("id") long authorId, @Valid @RequestBody BookDto bookDto) {
+    return bookService.save(authorId, bookDto);
   }
 
   @PutMapping("/{id}")
-  public Book update(@PathVariable("id") long id, @RequestBody BookDto bookDto) {
+  public Book update(@PathVariable("id") long id, @Valid @RequestBody BookDto bookDto) {
     return bookService.update(id, bookDto);
   }
 

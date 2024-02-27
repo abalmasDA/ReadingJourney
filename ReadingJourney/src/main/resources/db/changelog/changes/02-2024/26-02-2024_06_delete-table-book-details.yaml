@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: 26-02-2024_06_delete-table-book-details
+      author: Dmytro Abalmas
+      changes:
+        - dropTable:
+            tableName: book_details

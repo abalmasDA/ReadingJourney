@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 26-02-2024_08_add-column-table-author
+      author: Dmytro Abalmas
+      changes:
+        - addColumn:
+            tableName: author
+            columns:
+              - column:
+                  name: biography
+                  type: TEXT
