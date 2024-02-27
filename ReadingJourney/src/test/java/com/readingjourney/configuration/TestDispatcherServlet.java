@@ -11,7 +11,7 @@ public class TestDispatcherServlet extends AbstractAnnotationConfigDispatcherSer
 
   @Override
   protected Class<?>[] getServletConfigClasses() {
-    return new Class<?>[]{ApplicationConfigurationTest.class}; // Класс конфигурации для тестов
+    return new Class<?>[]{ApplicationConfigurationTest.class};
   }
 
   @Override
