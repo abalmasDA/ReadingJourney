@@ -114,6 +114,11 @@
       <version>5.10.0</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.nulab-inc</groupId>
+      <artifactId>zxcvbn</artifactId>
+      <version>1.8.2</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

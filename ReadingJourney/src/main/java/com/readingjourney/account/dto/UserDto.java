@@ -1,6 +1,8 @@
 package com.readingjourney.account.dto;
 
 
+import com.readingjourney.account.constraint.PasswordStrength;
+import com.readingjourney.account.constraint.PasswordStrengthCheck;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -33,7 +35,7 @@ public class UserDto {
   private String email;
 
   @NotBlank(message = "Password is required")
-  @Size(min = 8, max = 20, message = "Password must be between 8 and 20 characters long")
+  @PasswordStrengthCheck(PasswordStrength.STRONG)
   private String password;
 
 }
