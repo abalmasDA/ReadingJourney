@@ -24,7 +24,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @ComponentScan(value = "com.readingjourney")
 @PropertySource("classpath:application.properties")
-@EnableJpaRepositories(basePackages = "com.readingjourney.book.repository")
+@EnableJpaRepositories(basePackages = "com.readingjourney")
 @EnableTransactionManagement
 public class ApplicationConfiguration {
 
