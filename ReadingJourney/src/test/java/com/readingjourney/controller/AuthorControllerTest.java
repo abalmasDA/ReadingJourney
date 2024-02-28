@@ -133,7 +133,7 @@ public class AuthorControllerTest {
     mockMvc.perform(MockMvcRequestBuilders.put("/authors/{id}", id)
         .contentType(MediaType.APPLICATION_JSON)
         .content(requestBody)).andExpect(
-        MockMvcResultMatchers.status().isBadRequest()); // the test always returns code 200
+        MockMvcResultMatchers.status().isBadRequest());
   }
 
   @Test

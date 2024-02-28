@@ -97,7 +97,6 @@ public class BookControllerTest {
         .andExpect(jsonPath("$.id").exists());
   }
 
-
   @Test
   public void updateBookTest() throws Exception {
     long id = 1;
