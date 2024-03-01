@@ -1,9 +1,21 @@
 databaseChangeLog:
   - include:
-      file: src/main/resources/db/changelog/changes/02-2024/13-02-2024_01_create-table-book-details.yaml
+      file: db/changelog/changes/02-2024/13-02-2024_01_create-table-book-details.yaml
   - include:
-      file: src/main/resources/db/changelog/changes/02-2024/13-02-2024_02_create-table-author.yaml
+      file: db/changelog/changes/02-2024/13-02-2024_02_create-table-author.yaml
   - include:
-      file: src/main/resources/db/changelog/changes/02-2024/13-02-2024_03_create-table-book.yaml
+      file: db/changelog/changes/02-2024/13-02-2024_03_create-table-book.yaml
   - include:
-      file: src/main/resources/db/changelog/changes/02-2024/13-02-2024_04_add-foreign-keys-book-table.yaml
+      file: db/changelog/changes/02-2024/13-02-2024_04_add-foreign-keys-book-table.yaml
+  - include:
+      file: db/changelog/changes/02-2024/26-02-2024_05_delete-foreign-keys-book-table.yaml
+  - include:
+      file: db/changelog/changes/02-2024/26-02-2024_06_delete-table-book-details.yaml
+  - include:
+      file: db/changelog/changes/02-2024/26-02-2024_07_add-colums-table-book.yaml
+  - include:
+      file: db/changelog/changes/02-2024/26-02-2024_08_add-column-table-author.yaml
+  - include:
+      file: db/changelog/changes/02-2024/26-02-2024_09_delete-column-table-author.yaml
+  - include:
+      file: db/changelog/changes/02-2024/27-02-2024_10_create-table-user.yaml

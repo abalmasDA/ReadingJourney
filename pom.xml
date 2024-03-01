@@ -24,7 +24,7 @@
     <lombok.version>1.18.30</lombok.version>
     <spring-webmvc.version>6.1.3</spring-webmvc.version>
     <jackson-databind.version>2.16.1</jackson-databind.version>
-    <jakarta.servlet-api.version>5.0.0</jakarta.servlet-api.version>
+    <jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
     <jackson-datatype-jsr310.version>2.16.1</jackson-datatype-jsr310.version>
     <jackson-datatype-jdk8.version>2.16.1</jackson-datatype-jdk8.version>
     <mysql-connector-j.version>8.0.33</mysql-connector-j.version>
@@ -97,6 +97,7 @@
       <groupId>com.mysql</groupId>
       <artifactId>mysql-connector-j</artifactId>
       <version>${mysql-connector-j.version}</version>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.hibernate.orm</groupId>

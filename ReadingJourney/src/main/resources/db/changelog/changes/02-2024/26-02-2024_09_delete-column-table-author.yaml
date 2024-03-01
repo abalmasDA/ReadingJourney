@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 26-02-2024_09_delete-column-table-author
+      author: Dmytro Abalmas
+      changes:
+        - dropColumn:
+            tableName: book
+            columnName: book_details_id

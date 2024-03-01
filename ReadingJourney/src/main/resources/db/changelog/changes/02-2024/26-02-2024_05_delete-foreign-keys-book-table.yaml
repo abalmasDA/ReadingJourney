@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 26-02-2024_05_delete-foreign-keys-book-table
+      author: Dmytro Abalmas
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: book
+            constraintName: fk_book_book_details

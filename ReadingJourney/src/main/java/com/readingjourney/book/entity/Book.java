@@ -1,27 +1,37 @@
-package com.readingjourney.entity;
+package com.readingjourney.book.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "book_details")
+@Table(name = "book")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookDetails {
+public class Book {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
+  @Column(name = "title", length = 100, nullable = false)
+  private String title;
+
+  @Column(name = "rating", nullable = false)
+  private Long rating;
 
   @Column(name = "year_publication", nullable = false)
   private LocalDate yearPublication;
@@ -41,8 +51,9 @@ public class BookDetails {
   @Column(name = "isbn", nullable = false)
   private Long isbn;
 
-  @OneToOne(mappedBy = "bookDetails")
-  private Book book;
-
+  @JsonBackReference
+  @ManyToOne
+  @JoinColumn(name = "author_id", referencedColumnName = "id", nullable = false)
+  private Author author;
 
 }
