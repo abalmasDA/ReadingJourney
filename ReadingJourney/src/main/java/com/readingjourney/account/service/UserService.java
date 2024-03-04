@@ -8,6 +8,7 @@ import com.readingjourney.account.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -73,6 +74,12 @@ public class UserService {
 
   public void deleteAll() {
     userRepository.deleteAll();
+  }
+
+  public User findUserByEmail(String email) throws UsernameNotFoundException {
+    return userRepository.findByEmail(email)
+        .orElseThrow(
+            () -> new UsernameNotFoundException("User with email " + email + " not found"));
   }
 
 }
