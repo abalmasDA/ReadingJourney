@@ -23,15 +23,15 @@ public class GlobalExceptionHandler {
    * @param ex the exception that was thrown
    * @return a ResponseEntity containing the error details and status code
    */
-//  @ExceptionHandler(Exception.class)
-//  public ResponseEntity<Object> handleExceptionErrors(Exception ex) {
-//    Map<String, Object> body = new HashMap<>();
-//    body.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
-//    body.put("error", "Internal Server Error");
-//    body.put("message",
-//        "Oops! Something went wrong:( We're working to fix it! Please try again later:");
-//    return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
-//  }
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<Object> handleExceptionErrors(Exception ex) {
+    Map<String, Object> body = new HashMap<>();
+    body.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+    body.put("error", "Internal Server Error");
+    body.put("message",
+        "Oops! Something went wrong:( We're working to fix it! Please try again later:");
+    return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ExceptionHandler(AuthorNotFoundException.class)
