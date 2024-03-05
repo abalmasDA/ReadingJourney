@@ -2,6 +2,7 @@ package com.readingjourney.account.service;
 
 import com.readingjourney.account.dto.AuthResponse;
 import com.readingjourney.account.dto.LoginDto;
+import com.readingjourney.account.entity.User;
 import com.readingjourney.account.exception.UserNotFoundException;
 import com.readingjourney.account.jwt.JwtService;
 import com.readingjourney.account.repository.UserRepository;
@@ -36,7 +37,7 @@ public class LoginService {
             loginDto.getPassword()
         )
     );
-    var user = userRepository
+    User user = userRepository
         .findByEmail(loginDto.getEmail())
         .orElseThrow(() -> new UserNotFoundException("User not found"));
     var jwtToken = jwtService.generateToken(user);
