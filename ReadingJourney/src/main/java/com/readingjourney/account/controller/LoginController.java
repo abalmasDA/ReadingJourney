@@ -1,15 +1,17 @@
 package com.readingjourney.account.controller;
 
-import com.readingjourney.account.dto.AuthenticationResponse;
+import com.readingjourney.account.dto.AuthResponse;
 import com.readingjourney.account.dto.LoginDto;
 import com.readingjourney.account.service.LoginService;
 import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Controller for handling user authentication.
+ */
 @RestController
 @RequestMapping("/auth/login")
 public class LoginController {
@@ -20,10 +22,15 @@ public class LoginController {
     this.loginService = loginService;
   }
 
+  /**
+   * loginController handles the POST request for user login.
+   *
+   * @param loginDto The LoginDto object containing user credentials
+   * @return An AuthResponse object containing the user's authentication status
+   */
   @PostMapping
-  public ResponseEntity<AuthenticationResponse> LoginController(
-      @RequestBody @Valid LoginDto loginDto) {
-    return ResponseEntity.ok(loginService.loginUser(loginDto));
+  public AuthResponse loginController(@RequestBody @Valid LoginDto loginDto) {
+    return loginService.loginUser(loginDto);
   }
 
 }

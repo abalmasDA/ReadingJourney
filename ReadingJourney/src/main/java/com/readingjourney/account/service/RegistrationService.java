@@ -1,6 +1,6 @@
 package com.readingjourney.account.service;
 
-import com.readingjourney.account.dto.AuthenticationResponse;
+import com.readingjourney.account.dto.AuthResponse;
 import com.readingjourney.account.dto.UserDto;
 import com.readingjourney.account.entity.Role;
 import com.readingjourney.account.entity.User;
@@ -24,7 +24,13 @@ public class RegistrationService {
     this.passwordEncoder = passwordEncoder;
   }
 
-  public AuthenticationResponse registerUser(UserDto userDto) {
+  /**
+   * Register a new user with the provided user information.
+   *
+   * @param userDto the user data transfer object containing user information
+   * @return an authentication response containing a JWT token
+   */
+  public AuthResponse registerUser(UserDto userDto) {
     User user = User.builder()
         .firstName(userDto.getFirstName())
         .lastName(userDto.getLastName())
@@ -36,7 +42,7 @@ public class RegistrationService {
         .build();
     userRepository.save(user);
     var jwtToken = jwtService.generateToken(user);
-    return AuthenticationResponse.builder()
+    return AuthResponse.builder()
         .token(jwtToken)
         .build();
   }

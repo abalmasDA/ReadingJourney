@@ -10,13 +10,18 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
 public class JwtService {
 
-  private static final String SECRET_KEY = "wVEYGy0Peuf9oBNIpI+82i3/Csero70XUvncBJGiuXwiZqsV5DRBy";
+  @Value("${jwt.token.secret.key}")
+  private String SECRET_KEY;
+
+  @Value("${jwt.token.expiration.time}")
+  private long EXPIRATION_TIME;
 
   public String extractUsername(String token) {
     return extractClaim(token, Claims::getSubject);
@@ -45,13 +50,20 @@ public class JwtService {
     return generateToken(new HashMap<>(), userDetails);
   }
 
+  /**
+   * Generates a JWT token with the provided extra claims and user details.
+   *
+   * @param extraClaims the extra claims to include in the token
+   * @param userDetails the user details used to generate the token
+   * @return the generated JWT token
+   */
   public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
     return Jwts
         .builder()
         .setClaims(extraClaims)
         .setSubject(userDetails.getUsername())
         .setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
+        .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
         .signWith(getSignInKey(), SignatureAlgorithm.HS256)
         .compact();
   }
