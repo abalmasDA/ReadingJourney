@@ -47,4 +47,13 @@ public class Author {
   @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private List<Book> books;
 
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "(" +
+        "id = " + id + ", " +
+        "firstName = " + firstName + ", " +
+        "lastName = " + lastName + ", " +
+        "biography = " + biography + ")";
+  }
+
 }
