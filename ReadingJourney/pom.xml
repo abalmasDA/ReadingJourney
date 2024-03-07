@@ -119,28 +119,25 @@
       <artifactId>zxcvbn</artifactId>
       <version>1.8.2</version>
     </dependency>
-    <!-- Spring AOP -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-aop</artifactId>
-      <version>6.1.3</version> <!-- Використовуйте актуальну версію Spring -->
+      <version>6.1.3</version>
     </dependency>
-    <!-- AspectJ Weaver - необхідний для виконання аспектів в runtime -->
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjweaver</artifactId>
-      <version>1.9.21</version> <!-- Використовуйте актуальну версію AspectJ -->
+      <version>1.9.21</version>
     </dependency>
-    <!-- Логування SLF4J з Logback як реалізацію -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>2.0.12</version> <!-- Використовуйте актуальну версію SLF4J -->
+      <version>2.0.12</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.4.14</version> <!-- Використовуйте актуальну версію Logback -->
+      <version>1.4.14</version>
     </dependency>
   </dependencies>
   <build>
