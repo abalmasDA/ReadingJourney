@@ -28,6 +28,7 @@ public class AuthorService {
     return authorRepository.findAll();
   }
 
+  @Loggable
   public Optional<Author> findById(long id) {
     return Optional.ofNullable(authorRepository.findById(id)
         .orElseThrow(() -> new AuthorNotFoundException("Author with id " + id + " not found")));
