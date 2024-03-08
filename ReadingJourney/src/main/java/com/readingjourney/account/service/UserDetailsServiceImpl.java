@@ -1,5 +1,7 @@
 package com.readingjourney.account.service;
 
+import com.readingjourney.account.entity.UserDetailsImpl;
+import com.readingjourney.account.entity.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +18,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    return userService.findUserByEmail(email);
+    User user = userService.findUserByEmail(email);
+    if (user == null) {
+      throw new UsernameNotFoundException("User not found with email: " + email);
+    }
+    return new UserDetailsImpl(user);
   }
+
 }

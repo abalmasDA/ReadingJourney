@@ -4,9 +4,11 @@ import com.readingjourney.account.dto.AuthResponse;
 import com.readingjourney.account.dto.UserDto;
 import com.readingjourney.account.entity.Role;
 import com.readingjourney.account.entity.User;
+import com.readingjourney.account.entity.UserDetailsImpl;
 import com.readingjourney.account.jwt.JwtService;
 import com.readingjourney.account.repository.UserRepository;
 import java.time.LocalDateTime;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +43,8 @@ public class RegistrationService {
         .role(Role.USER)
         .build();
     userRepository.save(user);
-    var jwtToken = jwtService.generateToken(user);
+    UserDetails userDetails = new UserDetailsImpl(user);
+    var jwtToken = jwtService.generateToken(userDetails);
     return AuthResponse.builder()
         .token(jwtToken)
         .build();

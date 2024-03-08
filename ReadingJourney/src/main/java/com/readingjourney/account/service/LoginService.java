@@ -3,11 +3,13 @@ package com.readingjourney.account.service;
 import com.readingjourney.account.dto.AuthResponse;
 import com.readingjourney.account.dto.LoginDto;
 import com.readingjourney.account.entity.User;
+import com.readingjourney.account.entity.UserDetailsImpl;
 import com.readingjourney.account.exception.UserNotFoundException;
 import com.readingjourney.account.jwt.JwtService;
 import com.readingjourney.account.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -40,7 +42,8 @@ public class LoginService {
     User user = userRepository
         .findByEmail(loginDto.getEmail())
         .orElseThrow(() -> new UserNotFoundException("User not found"));
-    var jwtToken = jwtService.generateToken(user);
+    UserDetails userDetails = new UserDetailsImpl(user);
+    var jwtToken = jwtService.generateToken(userDetails);
     return AuthResponse
         .builder()
         .token(jwtToken)

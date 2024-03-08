@@ -18,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,14 +43,14 @@ public class RegistrationServiceTest {
     String expectedToken = "JwtToken";
 
     given(passwordEncoder.encode(userDto.getPassword())).willReturn(encodedPassword);
-    given(jwtService.generateToken(any(User.class))).willReturn(expectedToken);
+    given(jwtService.generateToken(any(UserDetails.class))).willReturn(expectedToken);
     AuthResponse result = registrationService.registerUser(userDto);
 
     assertThat(result).isNotNull();
     assertThat(result.getToken()).isEqualTo(expectedToken);
     then(userRepository).should(times(1)).save(any(User.class));
     then(passwordEncoder).should(times(1)).encode(userDto.getPassword());
-    then(jwtService).should(times(1)).generateToken(any(User.class));
+    then(jwtService).should(times(1)).generateToken(any(UserDetails.class));
   }
 
 }

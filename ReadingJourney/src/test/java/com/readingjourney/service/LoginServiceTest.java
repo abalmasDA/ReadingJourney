@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import com.readingjourney.account.dto.AuthResponse;
 import com.readingjourney.account.dto.LoginDto;
 import com.readingjourney.account.entity.User;
+import com.readingjourney.account.entity.UserDetailsImpl;
 import com.readingjourney.account.jwt.JwtService;
 import com.readingjourney.account.repository.UserRepository;
 import com.readingjourney.account.service.LoginService;
@@ -21,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @ExtendWith(MockitoExtension.class)
 public class LoginServiceTest {
@@ -48,7 +50,7 @@ public class LoginServiceTest {
     given(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
         .willReturn(null);
     given(userRepository.findByEmail(loginDto.getEmail())).willReturn(Optional.of(user));
-    given(jwtService.generateToken(user)).willReturn(expectedToken);
+    given(jwtService.generateToken(any(UserDetails.class))).willReturn(expectedToken);
     AuthResponse result = loginService.loginUser(loginDto);
 
     assertThat(result).isNotNull();
@@ -57,7 +59,7 @@ public class LoginServiceTest {
         .authenticate(
             new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
     verify(userRepository, times(1)).findByEmail(loginDto.getEmail());
-    verify(jwtService, times(1)).generateToken(user);
+    verify(jwtService, times(1)).generateToken(any(UserDetails.class));
   }
 
 }
