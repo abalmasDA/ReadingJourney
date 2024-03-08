@@ -1,6 +1,7 @@
-package com.readingjourney.account.jwt;
+package com.readingjourney.account.configuration;
 
 
+import com.readingjourney.account.jwt.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
