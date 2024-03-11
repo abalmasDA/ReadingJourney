@@ -6,6 +6,7 @@ import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableJpaRepositories(basePackages = {"com.readingjourney.book.repository",
     "com.readingjourney.account.repository"})
 @EnableTransactionManagement
+@EnableAspectJAutoProxy
 public class ApplicationConfiguration {
 
   private final Environment environment;

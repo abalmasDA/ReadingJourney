@@ -1,5 +1,6 @@
 package com.readingjourney.book.service;
 
+import com.readingjourney.book.aspects.Loggable;
 import com.readingjourney.book.dto.AuthorDto;
 import com.readingjourney.book.entity.Author;
 import com.readingjourney.book.exception.AuthorNotFoundException;
@@ -27,6 +28,7 @@ public class AuthorService {
     return authorRepository.findAll();
   }
 
+  @Loggable
   public Optional<Author> findById(long id) {
     return Optional.ofNullable(authorRepository.findById(id)
         .orElseThrow(() -> new AuthorNotFoundException("Author with id " + id + " not found")));
@@ -38,6 +40,7 @@ public class AuthorService {
    * @param authorDto the AuthorDto to be saved
    * @return the saved Author
    */
+  @Loggable
   public Author save(AuthorDto authorDto) {
     Author author = authorMapper.toEntity(authorDto);
     authorRepository.save(author);
