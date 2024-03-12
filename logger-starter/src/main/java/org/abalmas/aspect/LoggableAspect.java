@@ -1,4 +1,4 @@
-package com.readingjourney.book.aspects;
+package org.abalmas.aspect;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Aspect
-@Component
 public class LoggableAspect {
 
   private final Logger logger = LoggerFactory.getLogger(this.getClass());
