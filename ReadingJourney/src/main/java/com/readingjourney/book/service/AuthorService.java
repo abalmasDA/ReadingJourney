@@ -1,6 +1,6 @@
 package com.readingjourney.book.service;
 
-import com.readingjourney.book.aspects.Loggable;
+
 import com.readingjourney.book.dto.AuthorDto;
 import com.readingjourney.book.entity.Author;
 import com.readingjourney.book.exception.AuthorNotFoundException;
@@ -8,6 +8,7 @@ import com.readingjourney.book.mapper.AuthorMapper;
 import com.readingjourney.book.repository.AuthorRepository;
 import java.util.List;
 import java.util.Optional;
+import org.abalmas.aspect.Loggable;
 import org.springframework.stereotype.Service;
 
 /**
