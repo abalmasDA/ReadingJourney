@@ -34,16 +34,12 @@ public class BookServiceTest {
 
   @Mock
   private BookRepository bookRepository;
-
   @Mock
   private AuthorRepository authorRepository;
-
   @Mock
   private BookMapper bookMapper;
-
   @InjectMocks
   private BookService bookService;
-
   private BookDto bookDto;
   private Book book;
   private Author author;
