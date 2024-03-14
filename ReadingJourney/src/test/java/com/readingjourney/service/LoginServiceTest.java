@@ -2,19 +2,21 @@ package com.readingjourney.service;
 
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.readingjourney.account.dto.AuthResponse;
 import com.readingjourney.account.dto.LoginDto;
 import com.readingjourney.account.entity.User;
-import com.readingjourney.account.entity.UserDetailsImpl;
+import com.readingjourney.account.exception.UserNotFoundException;
 import com.readingjourney.account.jwt.JwtService;
 import com.readingjourney.account.repository.UserRepository;
 import com.readingjourney.account.service.LoginService;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -39,27 +41,60 @@ public class LoginServiceTest {
   @InjectMocks
   private LoginService loginService;
 
+  private LoginDto loginDto;
+
+  private User user;
+
+  private String expectedToken;
+
+
+  @BeforeEach
+  public void setUp() {
+    loginDto = LoginDto
+        .builder()
+        .email("test@example.com")
+        .password("test")
+        .build();
+
+    user = User
+        .builder()
+        .email(loginDto.getEmail())
+        .build();
+
+    expectedToken = "expectedToken";
+  }
+
   @Test
   public void loginUserTest() {
 
-    LoginDto loginDto = new LoginDto("test@example.com", "test");
-    User user = new User();
-    user.setEmail(loginDto.getEmail());
-    String expectedToken = "expectedToken";
+    when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+        .thenReturn(null);
+    when(userRepository.findByEmail(loginDto.getEmail())).thenReturn(Optional.of(user));
+    when(jwtService.generateToken(any(UserDetails.class))).thenReturn(expectedToken);
 
-    given(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
-        .willReturn(null);
-    given(userRepository.findByEmail(loginDto.getEmail())).willReturn(Optional.of(user));
-    given(jwtService.generateToken(any(UserDetails.class))).willReturn(expectedToken);
     AuthResponse result = loginService.loginUser(loginDto);
 
     assertThat(result).isNotNull();
     assertThat(result.getToken()).isEqualTo(expectedToken);
-    verify(authenticationManager, times(1))
+    verify(authenticationManager)
         .authenticate(
             new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
-    verify(userRepository, times(1)).findByEmail(loginDto.getEmail());
-    verify(jwtService, times(1)).generateToken(any(UserDetails.class));
+    verify(userRepository).findByEmail(loginDto.getEmail());
+    verify(jwtService).generateToken(any(UserDetails.class));
+  }
+
+  @Test
+  void loginUserThrowsUserNotFoundExceptionTest() {
+
+    when(userRepository.findByEmail(loginDto.getEmail())).thenReturn(Optional.empty());
+
+    assertThatThrownBy(() -> loginService.loginUser(loginDto))
+        .isInstanceOf(UserNotFoundException.class)
+        .hasMessageContaining("User not found");
+    verify(authenticationManager).authenticate(
+        new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+    verify(userRepository).findByEmail(loginDto.getEmail());
+    verify(jwtService, never()).generateToken(any(UserDetails.class));
   }
 
 }
