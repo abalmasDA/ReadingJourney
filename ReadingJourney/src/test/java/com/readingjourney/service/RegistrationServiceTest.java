@@ -28,18 +28,23 @@ public class RegistrationServiceTest {
 
   @Mock
   private UserRepository userRepository;
+
   @Mock
   private PasswordEncoder passwordEncoder;
+
   @Mock
   private JwtService jwtService;
 
   @InjectMocks
   private RegistrationService registrationService;
-  private UserDto userDto;
-  private User savedUser;
-  private String encodedPassword;
-  private String expectedToken;
 
+  private UserDto userDto;
+
+  private User savedUser;
+
+  private String encodedPassword;
+
+  private String expectedToken;
 
   @BeforeEach
   public void setUp() {
