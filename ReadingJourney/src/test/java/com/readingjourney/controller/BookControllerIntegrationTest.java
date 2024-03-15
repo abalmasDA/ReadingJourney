@@ -8,34 +8,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.readingjourney.book.controller.BookController;
 import com.readingjourney.book.dto.BookDto;
 import com.readingjourney.book.entity.Author;
 import com.readingjourney.book.entity.Book;
 import com.readingjourney.book.repository.AuthorRepository;
 import com.readingjourney.book.repository.BookRepository;
-import com.readingjourney.configuration.ApplicationConfigurationTest;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = ApplicationConfigurationTest.class)
-@WebAppConfiguration
+@WebMvcTest(controllers = BookController.class) // Укажите ваш контроллер здесь
+@AutoConfigureMockMvc(addFilters = false)
 public class BookControllerIntegrationTest {
 
-  private MockMvc mockMvc;
-
   @Autowired
-  private WebApplicationContext webApplicationContext;
+  private MockMvc mockMvc;
 
   @Autowired
   private BookRepository bookRepository;
@@ -54,7 +47,6 @@ public class BookControllerIntegrationTest {
 
   @BeforeEach
   public void setup() {
-    this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 
     Author author = new Author()
         .builder()

@@ -8,32 +8,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.readingjourney.account.controller.UserController;
 import com.readingjourney.account.dto.UserDto;
 import com.readingjourney.account.entity.User;
 import com.readingjourney.account.repository.UserRepository;
-import com.readingjourney.configuration.ApplicationConfigurationTest;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = ApplicationConfigurationTest.class)
-@WebAppConfiguration
+@WebMvcTest(controllers = UserController.class) // Укажите ваш контроллер здесь
+@AutoConfigureMockMvc(addFilters = false)
 public class UserControllerIntegrationTest {
 
-  private MockMvc mockMvc;
-
   @Autowired
-  private WebApplicationContext webApplicationContext;
+  private MockMvc mockMvc;
 
   @Autowired
   private UserRepository userRepository;
@@ -47,7 +40,6 @@ public class UserControllerIntegrationTest {
 
   @BeforeEach
   public void setup() {
-    this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 
     User user = new User()
         .builder()
