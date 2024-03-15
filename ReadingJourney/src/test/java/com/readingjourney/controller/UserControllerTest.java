@@ -10,54 +10,87 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.readingjourney.account.configuration.SecurityConfiguration;
 import com.readingjourney.account.controller.UserController;
 import com.readingjourney.account.dto.UserDto;
 import com.readingjourney.account.entity.User;
+import com.readingjourney.account.jwt.JwtService;
 import com.readingjourney.account.service.UserService;
-import com.readingjourney.book.exception.GlobalExceptionHandler;
-import com.readingjourney.configuration.ApplicationConfigurationTest;
 import java.util.Collections;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 
-@ExtendWith(SpringExtension.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = ApplicationConfigurationTest.class)
+@WebMvcTest(UserController.class)
+@Import(SecurityConfiguration.class)
 public class UserControllerTest {
 
+  @Autowired
   private MockMvc mockMvc;
 
-  @Mock
+  @MockBean
   private UserService userService;
 
-  @InjectMocks
-  private UserController userController;
+  @MockBean
+  private JwtService jwtService;
+
+  @MockBean
+  private UserDetailsService userDetailsService;
+
+  @Autowired
+  private ObjectMapper objectMapper;
+
+  private final long userId = 1;
+
+  private User user;
+
+  private UserDto userDto;
+
+  private UserDto userDtoInvalidParam;
 
   @BeforeEach
   public void setUp() {
-    MockitoAnnotations.openMocks(this);
-    mockMvc = MockMvcBuilders.standaloneSetup(userController)
-        .setValidator(new LocalValidatorFactoryBean())
-        .setControllerAdvice(new GlobalExceptionHandler()).build();
+    user = new User()
+        .builder()
+        .id(userId)
+        .firstName("Tester")
+        .lastName("Tester")
+        .country("Usa")
+        .email("test@gmail.com")
+        .password("Test123456test")
+        .build();
+
+    userDto = UserDto.builder()
+        .firstName("Tester")
+        .lastName("Tester")
+        .country("Usa")
+        .email("test@gmail")
+        .password("Test123456test")
+        .build();
+
+    userDtoInvalidParam = UserDto.builder()
+        .firstName(" ")
+        .lastName(" ")
+        .country("Usa")
+        .email("test@gmail")
+        .password("Test123456test")
+        .build();
   }
 
   @Test
+  @WithMockUser(username = "test", password = "test", roles = "USER")
   public void findAllUsersTest() throws Exception {
-    User user = new User();
     when(userService.findAll()).thenReturn(Collections.singletonList(user));
     mockMvc.perform(get("/users"))
         .andExpect(status().isOk())
@@ -65,50 +98,37 @@ public class UserControllerTest {
   }
 
   @Test
+  @WithMockUser(username = "test", password = "test", roles = "USER")
   public void findUserByIdTest() throws Exception {
-    long id = 1;
-    User user = new User();
-    user.setId(id);
-    when(userService.findById(id)).thenReturn(Optional.of(user));
-    mockMvc.perform(get("/users/{id}", id))
+    when(userService.findById(userId)).thenReturn(Optional.of(user));
+    mockMvc.perform(get("/users/{id}", userId))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.id").value(id));
+        .andExpect(jsonPath("$.id").value(userId));
   }
 
   @Test
+  @WithMockUser(username = "test", password = "test", roles = "USER")
   public void addUserTest() throws Exception {
-    UserDto userDto = new UserDto();
-    userDto.setFirstName("User");
-    userDto.setLastName("User");
-    String requestBody = "{\"firstName\":\"User\",\"lastName\":\"User\", \"country\":\"Usa\","
-        + " \"email\":\"test@gmail.com\", \"password\":\"Test123456test\"}";
-    User user = new User();
-    user.setId(1L);
-    user.setFirstName("User");
-    user.setLastName("User");
-    user.setCountry("Usa");
-    user.setEmail("test@gmail.com");
-    user.setPassword("Test123456test");
+    String requestBody = objectMapper.writeValueAsString(userDto);
     when(userService.save(any(UserDto.class))).thenReturn(user);
-
     mockMvc.perform(post("/users")
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestBody))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.id").exists())
-        .andExpect(jsonPath("$.firstName").value("User"))
-        .andExpect(jsonPath("$.lastName").value("User"))
+        .andExpect(jsonPath("$.firstName").value("Tester"))
+        .andExpect(jsonPath("$.lastName").value("Tester"))
         .andExpect(jsonPath("$.country").value("Usa"))
         .andExpect(jsonPath("$.email").value("test@gmail.com"))
         .andExpect(jsonPath("$.password").value("Test123456test"));
   }
 
   @Test
+  @WithMockUser(username = "test", password = "test", roles = "USER")
   public void addUserInvalidNameTest() throws Exception {
-    String requestBody = "{\"firstName\":\"\",\"lastName\":\"User\", \"country\":\"Usa\","
-        + " \"email\":\"test@gmail.com\", \"password\":\"Test123456test\"}";
+    String requestBody = objectMapper.writeValueAsString(userDtoInvalidParam);
     mockMvc.perform(MockMvcRequestBuilders.post("/users")
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestBody))
@@ -116,52 +136,36 @@ public class UserControllerTest {
   }
 
   @Test
+  @WithMockUser(username = "test", password = "test", roles = "USER")
   public void updateUserTest() throws Exception {
-    long id = 1;
-    UserDto userDto = new UserDto();
-    userDto.setFirstName("User");
-    userDto.setLastName("User");
-    userDto.setCountry("Usa");
-    userDto.setEmail("test@gmail.com");
-    userDto.setPassword("Test123456test");
-    String requestBody = "{\"firstName\":\"User\",\"lastName\":\"User\", \"country\":\"Usa\","
-        + " \"email\":\"test@gmail.com\", \"password\":\"Test123456test\"}";
-    User user = new User();
-    user.setId(id);
-    user.setFirstName("User");
-    user.setLastName("User");
-    user.setCountry("Usa");
-    user.setEmail("test@gmail.com");
-    user.setPassword("Test123456test");
-    when(userService.update(id, userDto)).thenReturn(user);
-
-    mockMvc.perform(put("/users/{id}", id)
+    String requestBody = objectMapper.writeValueAsString(userDto);
+    when(userService.update(userId, userDto)).thenReturn(user);
+    mockMvc.perform(put("/users/{id}", userId)
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestBody))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.id").value(id))
-        .andExpect(jsonPath("$.firstName").value("User"))
-        .andExpect(jsonPath("$.lastName").value("User"))
+        .andExpect(jsonPath("$.id").value(userId))
+        .andExpect(jsonPath("$.firstName").value("Tester"))
+        .andExpect(jsonPath("$.lastName").value("Tester"))
         .andExpect(jsonPath("$.country").value("Usa"))
         .andExpect(jsonPath("$.email").value("test@gmail.com"))
         .andExpect(jsonPath("$.password").value("Test123456test"));
   }
 
   @Test
+  @WithMockUser(username = "test", password = "test", roles = "USER")
   public void updateUserInvalidNameTest() throws Exception {
-    long id = 1;
-    String requestBody = "{\"firstName\":\"\",\"lastName\":\"User\", \"country\":\"Usa\","
-        + " \"email\":\"test@gmail.com\", \"password\":\"Test123456test\"}";
-    mockMvc.perform(MockMvcRequestBuilders.put("/users/{id}", id)
+    String requestBody = objectMapper.writeValueAsString(userDtoInvalidParam);
+    mockMvc.perform(MockMvcRequestBuilders.put("/users/{id}", userId)
         .contentType(MediaType.APPLICATION_JSON)
         .content(requestBody)).andExpect(status().isBadRequest());
   }
 
   @Test
+  @WithMockUser(username = "test", password = "test", roles = "USER")
   public void deleteUserTest() throws Exception {
-    long id = 1;
-    mockMvc.perform(delete("/users/{id}", id))
+    mockMvc.perform(delete("/users/{id}", userId))
         .andExpect(status().isOk());
   }
 
