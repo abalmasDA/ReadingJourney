@@ -18,8 +18,11 @@ import com.readingjourney.book.dto.AuthorDto;
 import com.readingjourney.book.entity.Author;
 import com.readingjourney.book.repository.AuthorRepository;
 import java.time.LocalDateTime;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,6 +36,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@TestInstance(Lifecycle.PER_CLASS)
 public class AuthorControllerIntegrationTest {
 
   @Autowired
@@ -56,9 +60,9 @@ public class AuthorControllerIntegrationTest {
   @Autowired
   private ObjectMapper objectMapper;
 
-  private static final String AUTHORIZATION_HEADER = "Authorization";
+  private final String AUTHORIZATION_HEADER = "Authorization";
 
-  private static final String TOKEN_PREFIX = "Bearer ";
+  private final String TOKEN_PREFIX = "Bearer ";
 
   private final long AUTHOR_ID = 1;
 
@@ -68,8 +72,8 @@ public class AuthorControllerIntegrationTest {
 
   private String token;
 
-  @BeforeEach
-  public void setup() throws Exception {
+  @BeforeAll
+  public void setupOnce() throws Exception {
     User user = new User()
         .builder()
         .id(1L)
@@ -99,6 +103,10 @@ public class AuthorControllerIntegrationTest {
     String response = result.getResponse().getContentAsString();
     token = JsonPath.parse(response).read("$.token", String.class);
 
+  }
+
+  @BeforeEach
+  public void setup() throws Exception {
     Author author = new Author()
         .builder()
         .id(AUTHOR_ID)
@@ -123,7 +131,6 @@ public class AuthorControllerIntegrationTest {
         .andExpect(content().contentType(MediaType.APPLICATION_JSON));
   }
 
-
   @Test
   public void findByIdTest() throws Exception {
     mockMvc.perform(get("/authors/{id}", AUTHOR_ID)
@@ -131,7 +138,6 @@ public class AuthorControllerIntegrationTest {
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON));
   }
-
 
   @Test
   public void addTest() throws Exception {
