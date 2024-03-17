@@ -8,23 +8,38 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.readingjourney.book.controller.BookController;
+import com.jayway.jsonpath.JsonPath;
+import com.readingjourney.account.dto.LoginDto;
+import com.readingjourney.account.entity.Role;
+import com.readingjourney.account.entity.User;
+import com.readingjourney.account.jwt.JwtService;
+import com.readingjourney.account.repository.UserRepository;
 import com.readingjourney.book.dto.BookDto;
 import com.readingjourney.book.entity.Author;
 import com.readingjourney.book.entity.Book;
 import com.readingjourney.book.repository.AuthorRepository;
 import com.readingjourney.book.repository.BookRepository;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
-@WebMvcTest(controllers = BookController.class) // Укажите ваш контроллер здесь
-@AutoConfigureMockMvc(addFilters = false)
+@SpringBootTest
+@AutoConfigureMockMvc
+@ActiveProfiles("test")
+@TestInstance(Lifecycle.PER_CLASS)
 public class BookControllerIntegrationTest {
 
   @Autowired
@@ -37,20 +52,72 @@ public class BookControllerIntegrationTest {
   private AuthorRepository authorRepository;
 
   @Autowired
+  private UserRepository userRepository;
+
+  @Autowired
+  private JwtService jwtService;
+
+  @Autowired
+  private UserDetailsService userDetailsService;
+
+  @Autowired
+  private PasswordEncoder passwordEncoder;
+
+  @Autowired
   private ObjectMapper objectMapper;
 
-  private final long bookId = 1;
+  private final String AUTHORIZATION_HEADER = "Authorization";
 
-  private final long authorId = 1;
+  private final String TOKEN_PREFIX = "Bearer ";
+
+  private final long BOOK_ID = 1;
+
+  private final long AUTHOR_ID = 1;
 
   private BookDto bookDto;
 
+  private LoginDto loginDto;
+
+  private String token;
+
+  @BeforeAll
+  public void setupOnce() throws Exception {
+    User user = new User()
+        .builder()
+        .id(1L)
+        .firstName("userTest")
+        .lastName("userTest")
+        .country("USA")
+        .email("usertest@gmail.com")
+        .password(passwordEncoder.encode("passwordtest123"))
+        .createdAt(LocalDateTime.now())
+        .role(Role.USER)
+        .build();
+    userRepository.save(user);
+
+    loginDto = LoginDto.builder()
+        .email("usertest@gmail.com")
+        .password("passwordtest123")
+        .build();
+
+    String requestBody = objectMapper.writeValueAsString(loginDto);
+
+    MvcResult result = mockMvc.perform(post("/auth/login")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(requestBody))
+        .andExpect(status().isOk())
+        .andReturn();
+
+    String response = result.getResponse().getContentAsString();
+    token = JsonPath.parse(response).read("$.token", String.class);
+
+  }
+
   @BeforeEach
   public void setup() {
-
     Author author = new Author()
         .builder()
-        .id(authorId)
+        .id(AUTHOR_ID)
         .firstName("Tester")
         .lastName("Tester")
         .biography("Tester")
@@ -59,8 +126,8 @@ public class BookControllerIntegrationTest {
 
     Book book = new Book()
         .builder()
-        .id(bookId)
-        .author(authorRepository.findById(authorId).get())
+        .id(BOOK_ID)
+        .author(authorRepository.findById(AUTHOR_ID).get())
         .title("Tester")
         .rating(5L)
         .yearPublication(LocalDate.now())
@@ -87,21 +154,24 @@ public class BookControllerIntegrationTest {
 
   @Test
   public void allTest() throws Exception {
-    mockMvc.perform(get("/books"))
+    mockMvc.perform(get("/books")
+            .header(AUTHORIZATION_HEADER, TOKEN_PREFIX + token))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON));
   }
 
   @Test
   public void findByIdTest() throws Exception {
-    mockMvc.perform(get("/books/{id}", bookId))
+    mockMvc.perform(get("/books/{id}", BOOK_ID)
+            .header(AUTHORIZATION_HEADER, TOKEN_PREFIX + token))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON));
   }
 
   @Test
   public void addTest() throws Exception {
-    mockMvc.perform(post("/books/{id}", authorId)
+    mockMvc.perform(post("/books/{id}", AUTHOR_ID)
+            .header(AUTHORIZATION_HEADER, TOKEN_PREFIX + token)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(bookDto)))
         .andExpect(status().isOk());
@@ -109,7 +179,8 @@ public class BookControllerIntegrationTest {
 
   @Test
   public void updateTest() throws Exception {
-    mockMvc.perform(put("/books/{id}", bookId)
+    mockMvc.perform(put("/books/{id}", BOOK_ID)
+            .header(AUTHORIZATION_HEADER, TOKEN_PREFIX + token)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(bookDto)))
         .andExpect(status().isOk());
@@ -117,7 +188,8 @@ public class BookControllerIntegrationTest {
 
   @Test
   public void deleteTest() throws Exception {
-    mockMvc.perform(delete("/books/{id}", bookId))
+    mockMvc.perform(delete("/books/{id}", BOOK_ID)
+            .header(AUTHORIZATION_HEADER, TOKEN_PREFIX + token))
         .andExpect(status().isOk());
   }
 
