@@ -22,6 +22,8 @@
     <liquibase.core.version>4.25.1</liquibase.core.version>
     <mapstruct.version>1.5.5.Final</mapstruct.version>
     <jwt.version>0.11.5</jwt.version>
+    <spring-security-test.version>6.2.2</spring-security-test.version>
+    <springdoc-openapi-starter-webmvc-ui.version>2.3.0</springdoc-openapi-starter-webmvc-ui.version>
   </properties>
   <dependencies>
     <dependency>
@@ -38,6 +40,17 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
       <version>${spring.boot.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-test</artifactId>
+      <version>${spring-security-test.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+      <version>${springdoc-openapi-starter-webmvc-ui.version}</version>
     </dependency>
     <dependency>
       <groupId>org.abalmas</groupId>

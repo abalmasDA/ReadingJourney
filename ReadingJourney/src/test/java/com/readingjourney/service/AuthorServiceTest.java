@@ -27,15 +27,11 @@ public class AuthorServiceTest {
 
   @Mock
   private AuthorRepository authorRepository;
-
   @Mock
   private AuthorMapper authorMapper;
-
   @InjectMocks
   private AuthorService authorService;
-
   private AuthorDto authorDto;
-
   private Author author;
   private long authorId;
 

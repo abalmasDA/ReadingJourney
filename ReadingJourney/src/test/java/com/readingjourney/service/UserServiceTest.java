@@ -30,15 +30,11 @@ public class UserServiceTest {
 
   @Mock
   private UserRepository userRepository;
-
   @Mock
   private UserMapper userMapper;
-
   @InjectMocks
   private UserService userService;
-
   private UserDto userDto;
-
   private User user;
   private long userId;
 

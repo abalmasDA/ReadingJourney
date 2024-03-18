@@ -1,0 +1,784 @@
+openapi: 3.0.3
+info:
+  title: ReadingJourney API
+  description: The ReadingJourney API is a interface designed to empower the management of users, books, authors, and related interactions on a dynamic platform. Crafted with the intent to enrich user experience, this API facilitates  onboarding, allows for meticulous cataloging of literary works, and manages intricate associations between books, their authors, and readers.
+  termsOfService: ReadingJourney
+  contact:
+    name: ReadingJourney
+    url: https://readinggourney.com
+    email: readinggourney@gmail.com
+  license:
+    name: ReadingJourney
+    url: https://readinggourney.com
+  version: 0.0.1-SNAPSHOT
+servers:
+  - url: http://localhost:8080
+    description: Local environment
+  - url: https://readinggourney.com
+    description: Production environment
+tags:
+  - name: Registration
+    description: Endpoint for user registration
+  - name: Login
+    description: Endpoint for user login
+  - name: Users
+    description: Endpoints for user management
+  - name: Authors
+    description: Endpoints for authors management
+  - name: Books
+    description: Endpoints for books management
+paths:
+  /auth/signup:
+    post:
+      tags:
+        - Registration
+      summary: Registration user
+      description: Register a new user
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDto'
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /auth/signin:
+    post:
+      tags:
+        - Login
+      summary: Login user
+      description: Login a user based on the provided login credentials.
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginDto'
+      responses:
+        '200':
+          description: Successful authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        '400':
+          description: Bad request, e.g., missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden, e.g., invalid email or password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Get all users
+      description: Retrieve a list of all users in the system.
+      operationId: findAll
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request, such as a malformed request syntax or invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error, indicating a server-side issue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - Users
+      summary: Create a new user
+      description: Create a new user
+      operationId: add
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDto'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request, such as a malformed request syntax or invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error, indicating a server-side issue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Get user by user id
+      description: Retrieve a specific user based on the provided user ID
+      operationId: findById
+      parameters:
+        - name: id
+          in: path
+          description: Unique identifier of the user profile to be fetched
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request, such as a malformed request syntax or invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error, indicating a server-side issue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+        - Users
+      summary: Update a user
+      description: Updates an existing user's profile information with provided data
+      operationId: update
+      parameters:
+        - name: id
+          in: path
+          description: Unique identifier of the user profile to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDto'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request, such as a malformed request syntax or invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error, indicating a server-side issue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - Users
+      summary: Delete a user
+      description: Deletes a user profile from the system based on the provided user ID
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          description: The id that needs to be fetched
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Bad request, such as a malformed request syntax or invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error, indicating a server-side issue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /authors:
+    get:
+      tags:
+        - Authors
+      summary: Get all authors
+      description: Retrieve a list of all authors in the system.
+      operationId: findAll
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Author'
+        '400':
+          description: Bad request, such as a malformed request syntax or invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error, indicating a server-side issue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - Authors
+      summary: Create a new author
+      description: Create a new author in the system with provided data
+      operationId: add
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorDto'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+        '400':
+          description: Bad request, such as a malformed request syntax or invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error, indicating a server-side issue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /authors/{id}:
+    get:
+      tags:
+        - Authors
+      summary: Get author by author id
+      description: Retrieve a specific author based on the provided author ID
+      operationId: findById
+      parameters:
+        - name: id
+          in: path
+          description: Unique identifier of the author to be fetched
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+        '400':
+          description: Bad request, such as a malformed request syntax or invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error, indicating a server-side issue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+        - Authors
+      summary: Update an author
+      description: Updates an existing author's profile information with provided data
+      operationId: update
+      parameters:
+        - name: id
+          in: path
+          description: Unique identifier of the author profile to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorDto'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+        '400':
+          description: Bad request, such as a malformed request syntax or invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error, indicating a server-side issue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - Authors
+      summary: Delete an author
+      description: Deletes an author from the system based on the provided author ID
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          description: The id that needs to be fetched
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Bad request, such as a malformed request syntax or invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error, indicating a server-side issue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /books:
+    get:
+      tags:
+        - Books
+      summary: Get all books
+      description: Retrieve a list of all books in the system.
+      operationId: findAll
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+        '400':
+          description: Bad request, such as a malformed request syntax or invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error, indicating a server-side issue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /books/{id}:
+    get:
+      tags:
+        - Books
+      summary: Get book by id
+      description: Retrieve a specific book based on the provided book ID
+      operationId: findById
+      parameters:
+        - name: id
+          in: path
+          description: Unique identifier of the book to be fetched
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Bad request, such as a malformed request syntax or invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error, indicating a server-side issue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - Books
+      summary: Create a new book
+      description: Create a new book in the system with provided data
+      operationId: add
+      parameters:
+        - name: AuthorId
+          in: path
+          description: Unique identifier of the author
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookDto'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Bad request, such as a malformed request syntax or invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error, indicating a server-side issue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+        - Books
+      summary: Update a book
+      description: Updates an existing book's profile information with provided data
+      operationId: update
+      parameters:
+        - name: id
+          in: path
+          description: Unique identifier of the book profile to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookDto'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Bad request, such as a malformed request syntax or invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error, indicating a server-side issue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - Books
+      summary: Delete a book
+      description: Deletes a book from the system based on the provided book ID
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          description: The id that needs to be fetched
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Bad request, such as a malformed request syntax or invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error, indicating a server-side issue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    Token:
+      type: object
+      description: JWT token of the user
+      properties:
+        token:
+          type: string
+          description: JWT token
+    LoginDto:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: Email address of the user
+        password:
+          type: string
+          format: password
+          description: Password of the user
+      required:
+        - email
+        - password
+    UserDto:
+      type: object
+      description: Required information for registering a new user
+      properties:
+        firstName:
+          type: string
+          description: The first name inputted by the user
+        lastName:
+          type: string
+          description: The last name inputted by the user
+        country:
+          type: string
+          description: The country chosen by the user for their account
+        email:
+          type: string
+          format: email
+          description: The email chosen by the user for their account
+        password:
+          type: string
+          description: The password chosen by the user for their account
+      required:
+        - firstName
+        - lastName
+        - country
+        - email
+        - password
+    AuthorDto:
+      type: object
+      description: Required information for adding a new author
+      properties:
+        firstName:
+          type: string
+          description: The author's firstname inputted by the user
+        lastName:
+          type: string
+          description: The author's lastname inputted by the user
+        biography:
+          type: string
+          description: The author's biography
+      required:
+        - firstName
+        - lastName
+    BookDto:
+      type: object
+      description: Required information for adding a new book
+      properties:
+        title:
+          type: string
+          maxLength: 255
+          description: The title of the book
+        rating:
+          type: integer
+          description: The rating of the book
+        yearPublication:
+          type: string
+          format: date
+          description: The year the book was published
+        numberPages:
+          type: integer
+          description: The number of pages in the book
+        genre:
+          type: string
+          maxLength: 100
+          description: The genre of the book.
+        format:
+          type: string
+          maxLength: 100
+          description: The format of the book (e.g., paperback, hardcover, ebook).
+        edition:
+          type: string
+          maxLength: 100
+          description: The edition of the book
+        isbn:
+          type: integer
+          description: The International Standard Book Number of the book
+      required:
+        - title
+        - rating
+        - yearPublication
+        - numberPages
+        - genre
+        - format
+        - edition
+        - isbn
+    User:
+      type: object
+      description: User's information
+      properties:
+        firstName:
+          type: string
+          description: The first name inputted by the user
+        lastName:
+          type: string
+          description: The last name inputted by the user
+        country:
+          type: string
+          description: The country chosen by the user for their account
+        email:
+          type: string
+          format: email
+          description: The email chosen by the user for their account
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp when the user account was created
+    Author:
+      type: object
+      description: Detailed information about an author
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique identifier for the author
+        firstName:
+          type: string
+          description: The author's first name
+        lastName:
+          type: string
+          description: The author's last name
+        biography:
+          type: string
+          description: A brief overview of the author's life and career
+        books:
+          type: array
+          description: A list of books written by the author
+          items:
+            $ref: '#/components/schemas/Book'
+    Book:
+      type: object
+      description: Detailed information about a book
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique identifier for the book
+        title:
+          type: string
+          maxLength: 100
+          description: The title of the book
+        rating:
+          type: integer
+          description: The rating of the book
+        yearPublication:
+          type: string
+          format: date
+          description: The year the book was published
+        numberPages:
+          type: integer
+          description: The number of pages in the book
+        genre:
+          type: string
+          maxLength: 100
+          description: The genre of the book.
+        format:
+          type: string
+          maxLength: 100
+          description: The format of the book (e.g., paperback, hardcover, ebook).
+        edition:
+          type: string
+          maxLength: 100
+          description: The edition of the book
+        isbn:
+          type: integer
+          description: The International Standard Book Number of the book
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
