@@ -1,8 +1,8 @@
 package com.readingjourney.service;
 
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -24,7 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @ExtendWith(MockitoExtension.class)
-public class RegistrationServiceTest {
+class RegistrationServiceTest {
 
   @Mock
   private UserRepository userRepository;
@@ -62,7 +62,7 @@ public class RegistrationServiceTest {
   }
 
   @Test
-  public void registerUserTest() {
+  void registerUserTest() {
 
     when(passwordEncoder.encode(userDto.getPassword())).thenReturn(encodedPassword);
     when(jwtService.generateToken(any(UserDetails.class))).thenReturn(expectedToken);

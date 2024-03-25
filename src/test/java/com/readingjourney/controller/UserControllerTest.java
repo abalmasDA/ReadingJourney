@@ -34,7 +34,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @WebMvcTest(UserController.class)
 @Import(SecurityConfiguration.class)
-public class UserControllerTest {
+class UserControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -90,7 +90,7 @@ public class UserControllerTest {
 
   @Test
   @WithMockUser(username = "test", password = "test", roles = "USER")
-  public void findAllUsersTest() throws Exception {
+  void findAllUsersTest() throws Exception {
     when(userService.findAll()).thenReturn(Collections.singletonList(user));
     mockMvc.perform(get("/users"))
         .andExpect(status().isOk())
@@ -99,7 +99,7 @@ public class UserControllerTest {
 
   @Test
   @WithMockUser(username = "test", password = "test", roles = "USER")
-  public void findUserByIdTest() throws Exception {
+  void findUserByIdTest() throws Exception {
     when(userService.findById(userId)).thenReturn(Optional.of(user));
     mockMvc.perform(get("/users/{id}", userId))
         .andExpect(status().isOk())
@@ -109,7 +109,7 @@ public class UserControllerTest {
 
   @Test
   @WithMockUser(username = "test", password = "test", roles = "USER")
-  public void addUserTest() throws Exception {
+  void addUserTest() throws Exception {
     String requestBody = objectMapper.writeValueAsString(userDto);
     when(userService.save(any(UserDto.class))).thenReturn(user);
     mockMvc.perform(post("/users")
@@ -127,7 +127,7 @@ public class UserControllerTest {
 
   @Test
   @WithMockUser(username = "test", password = "test", roles = "USER")
-  public void addUserInvalidNameTest() throws Exception {
+  void addUserInvalidNameTest() throws Exception {
     String requestBody = objectMapper.writeValueAsString(userDtoInvalidParam);
     mockMvc.perform(MockMvcRequestBuilders.post("/users")
             .contentType(MediaType.APPLICATION_JSON)
@@ -137,7 +137,7 @@ public class UserControllerTest {
 
   @Test
   @WithMockUser(username = "test", password = "test", roles = "USER")
-  public void updateUserTest() throws Exception {
+  void updateUserTest() throws Exception {
     String requestBody = objectMapper.writeValueAsString(userDto);
     when(userService.update(userId, userDto)).thenReturn(user);
     mockMvc.perform(put("/users/{id}", userId)
@@ -155,7 +155,7 @@ public class UserControllerTest {
 
   @Test
   @WithMockUser(username = "test", password = "test", roles = "USER")
-  public void updateUserInvalidNameTest() throws Exception {
+  void updateUserInvalidNameTest() throws Exception {
     String requestBody = objectMapper.writeValueAsString(userDtoInvalidParam);
     mockMvc.perform(MockMvcRequestBuilders.put("/users/{id}", userId)
         .contentType(MediaType.APPLICATION_JSON)
@@ -164,7 +164,7 @@ public class UserControllerTest {
 
   @Test
   @WithMockUser(username = "test", password = "test", roles = "USER")
-  public void deleteUserTest() throws Exception {
+  void deleteUserTest() throws Exception {
     mockMvc.perform(delete("/users/{id}", userId))
         .andExpect(status().isOk());
   }

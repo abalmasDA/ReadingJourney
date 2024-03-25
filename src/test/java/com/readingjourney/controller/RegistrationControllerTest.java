@@ -27,7 +27,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @WebMvcTest(RegistrationController.class)
 @Import(SecurityConfiguration.class)
-public class RegistrationControllerTest {
+class RegistrationControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -76,7 +76,7 @@ public class RegistrationControllerTest {
   }
 
   @Test
-  public void registerUserTest() throws Exception {
+  void registerUserTest() throws Exception {
     String requestBody = objectMapper.writeValueAsString(userDto);
     when(registrationService.registerUser(any(UserDto.class))).thenReturn(authResponse);
     mockMvc.perform(post("/auth/signup")
@@ -89,7 +89,7 @@ public class RegistrationControllerTest {
   }
 
   @Test
-  public void registerUserInvalidNameTest() throws Exception {
+  void registerUserInvalidNameTest() throws Exception {
     String requestBody = objectMapper.writeValueAsString(userDtoInvalidParam);
     mockMvc.perform(MockMvcRequestBuilders.post("/auth/signup")
             .contentType(MediaType.APPLICATION_JSON)

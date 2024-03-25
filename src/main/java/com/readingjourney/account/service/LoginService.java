@@ -41,7 +41,7 @@ public class LoginService {
     );
     User user = userRepository
         .findByEmail(loginDto.getEmail())
-        .orElseThrow(() -> new UserNotFoundException("User not found"));
+        .orElseThrow(() -> new UserNotFoundException(loginDto.getEmail()));
     UserDetails userDetails = new UserDetailsImpl(user);
     var jwtToken = jwtService.generateToken(userDetails);
     return AuthResponse

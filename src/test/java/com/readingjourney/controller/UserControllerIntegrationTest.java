@@ -35,7 +35,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
-public class UserControllerIntegrationTest {
+class UserControllerIntegrationTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -126,7 +126,7 @@ public class UserControllerIntegrationTest {
   }
 
   @Test
-  public void allTest() throws Exception {
+  void allTest() throws Exception {
     mockMvc.perform(get("/users")
             .header(AUTHORIZATION_HEADER, TOKEN_PREFIX + token))
         .andExpect(status().isOk())
@@ -134,7 +134,7 @@ public class UserControllerIntegrationTest {
   }
 
   @Test
-  public void findByIdTest() throws Exception {
+  void findByIdTest() throws Exception {
     mockMvc.perform(get("/users/{id}", USER_ID)
             .header(AUTHORIZATION_HEADER, TOKEN_PREFIX + token))
         .andExpect(status().isOk())
@@ -142,7 +142,7 @@ public class UserControllerIntegrationTest {
   }
 
   @Test
-  public void addTest() throws Exception {
+  void addTest() throws Exception {
     mockMvc.perform(post("/users")
             .header(AUTHORIZATION_HEADER, TOKEN_PREFIX + token)
             .contentType(MediaType.APPLICATION_JSON)
@@ -151,7 +151,7 @@ public class UserControllerIntegrationTest {
   }
 
   @Test
-  public void updateTest() throws Exception {
+  void updateTest() throws Exception {
     mockMvc.perform(put("/users/{id}", 1)
             .header(AUTHORIZATION_HEADER, TOKEN_PREFIX + token)
             .contentType(MediaType.APPLICATION_JSON)
@@ -160,7 +160,7 @@ public class UserControllerIntegrationTest {
   }
 
   @Test
-  public void deleteTest() throws Exception {
+  void deleteTest() throws Exception {
     mockMvc.perform(delete("/users/{id}", USER_ID)
             .header(AUTHORIZATION_HEADER, TOKEN_PREFIX + token))
         .andExpect(status().isOk());

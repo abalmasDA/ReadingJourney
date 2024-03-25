@@ -32,7 +32,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class RegistrationControllerIntegrationTest {
+class RegistrationControllerIntegrationTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -84,7 +84,7 @@ public class RegistrationControllerIntegrationTest {
   }
 
   @Test
-  public void registerUserTest() throws Exception {
+  void registerUserTest() throws Exception {
     String expectedEmail = "test@gmail";
     String requestBody = objectMapper.writeValueAsString(userDto);
     MvcResult result = mockMvc.perform(post("/auth/signup")
@@ -121,7 +121,7 @@ public class RegistrationControllerIntegrationTest {
   }
 
   @Test
-  public void registerUserInvalidNameTest() throws Exception {
+  void registerUserInvalidNameTest() throws Exception {
     String requestBody = objectMapper.writeValueAsString(userDtoInvalidParam);
     mockMvc.perform(post("/auth/signup")
             .contentType(MediaType.APPLICATION_JSON)

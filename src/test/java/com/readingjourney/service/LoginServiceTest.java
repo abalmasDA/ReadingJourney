@@ -27,7 +27,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 
 @ExtendWith(MockitoExtension.class)
-public class LoginServiceTest {
+class LoginServiceTest {
 
   @Mock
   private UserRepository userRepository;
@@ -65,7 +65,7 @@ public class LoginServiceTest {
   }
 
   @Test
-  public void loginUserTest() {
+  void loginUserTest() {
 
     when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
         .thenReturn(null);
@@ -90,7 +90,7 @@ public class LoginServiceTest {
 
     assertThatThrownBy(() -> loginService.loginUser(loginDto))
         .isInstanceOf(UserNotFoundException.class)
-        .hasMessageContaining("User not found");
+        .hasMessageContaining("User with email %s not found", loginDto.getEmail());
     verify(authenticationManager).authenticate(
         new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
     verify(userRepository).findByEmail(loginDto.getEmail());
