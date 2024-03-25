@@ -29,6 +29,10 @@
     <maven.compiler.plugin.version>3.12.1</maven.compiler.plugin.version>
     <maven.surefire.plugin.version>3.2.5</maven.surefire.plugin.version>
     <liquibase-maven-plugin.version>4.26.0</liquibase-maven-plugin.version>
+    <maven-checkstyle-plugin.version>3.3.1</maven-checkstyle-plugin.version>
+    <checkstyle.version>10.12.7</checkstyle.version>
+    <checkstyle.reports.location>target/checkstyle-reports</checkstyle.reports.location>
+    <checkstyle.config.location>src/main/resources/checkstyle</checkstyle.config.location>
   </properties>
   <dependencies>
     <dependency>
@@ -166,6 +170,36 @@
               <version>${lombok-mapstruct-binding.version}</version>
             </path>
           </annotationProcessorPaths>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${maven-checkstyle-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>checkstyle</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>${checkstyle.version}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <configLocation>
+            ${checkstyle.config.location}/java-google-style.xml
+          </configLocation>
+          <consoleOutput>true</consoleOutput>
+          <failsOnError>true</failsOnError>
+          <outputFile>${checkstyle.reports.location}/checkstyle-report.xml</outputFile>
+          <includeTestSourceDirectory>true</includeTestSourceDirectory>
         </configuration>
       </plugin>
       <plugin>
