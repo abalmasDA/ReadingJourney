@@ -1,6 +1,7 @@
 package com.readingjourney.account.service;
 
 import com.readingjourney.account.dto.UserDto;
+import com.readingjourney.account.entity.Role;
 import com.readingjourney.account.entity.User;
 import com.readingjourney.account.exception.UserNotFoundException;
 import com.readingjourney.account.mapper.UserMapper;
@@ -28,7 +29,7 @@ public class UserService {
 
   public Optional<User> findById(long id) {
     return Optional.ofNullable(userRepository.findById(id)
-        .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found")));
+        .orElseThrow(() -> new UserNotFoundException(id)));
   }
 
   /**
@@ -40,6 +41,7 @@ public class UserService {
   public User save(UserDto userDto) {
     User user = userMapper.toEntity(userDto);
     user.setCreatedAt(LocalDateTime.now());
+    user.setRole(Role.USER);
     return userRepository.save(user);
   }
 
@@ -56,7 +58,7 @@ public class UserService {
       user1.setLastName(userDto.getLastName());
       user1.setCountry(userDto.getCountry());
       return userRepository.save(user1);
-    }).orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
+    }).orElseThrow(() -> new UserNotFoundException(id));
   }
 
   /**
@@ -68,7 +70,7 @@ public class UserService {
     if (userRepository.existsById(id)) {
       userRepository.deleteById(id);
     } else {
-      throw new UserNotFoundException("User with id " + id + " not found");
+      throw new UserNotFoundException(id);
     }
   }
 
@@ -79,7 +81,7 @@ public class UserService {
   public User findUserByEmail(String email) throws UsernameNotFoundException {
     return userRepository.findByEmail(email)
         .orElseThrow(
-            () -> new UsernameNotFoundException("User with email " + email + " not found"));
+            () -> new UsernameNotFoundException(email));
   }
 
 }

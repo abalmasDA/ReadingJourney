@@ -26,7 +26,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+class UserServiceTest {
 
   @Mock
   private UserRepository userRepository;
@@ -48,11 +48,10 @@ public class UserServiceTest {
 
   @Test
   void findAllTest() {
-    long expected = 1;
+    int expected = 1;
     when(userRepository.findAll()).thenReturn(Collections.singletonList(user));
     List<User> users = userService.findAll();
-    assertThat(users).isNotNull();
-    assertThat(users.size()).isEqualTo(expected);
+    assertThat(users).hasSize(expected);
     verify(userRepository).findAll();
   }
 
