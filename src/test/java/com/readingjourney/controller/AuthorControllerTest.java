@@ -1,5 +1,15 @@
 package com.readingjourney.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.readingjourney.account.configuration.SecurityConfiguration;
 import com.readingjourney.account.jwt.JwtService;
@@ -7,6 +17,8 @@ import com.readingjourney.book.controller.AuthorController;
 import com.readingjourney.book.dto.AuthorDto;
 import com.readingjourney.book.entity.Author;
 import com.readingjourney.book.service.AuthorService;
+import java.util.Collections;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,22 +30,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import java.util.Collections;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AuthorController.class)
 @Import(SecurityConfiguration.class)
-public class AuthorControllerTest {
+class AuthorControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -82,7 +82,7 @@ public class AuthorControllerTest {
 
   @Test
   @WithMockUser(username = "test", password = "test", roles = "USER")
-  public void findAllAuthorsTest() throws Exception {
+  void findAllAuthorsTest() throws Exception {
     when(authorService.findAll()).thenReturn(Collections.singletonList(author));
     mockMvc.perform(get("/authors"))
         .andExpect(status().isOk())
@@ -91,7 +91,7 @@ public class AuthorControllerTest {
 
   @Test
   @WithMockUser(username = "test", password = "test", roles = "USER")
-  public void findAuthorByIdTest() throws Exception {
+  void findAuthorByIdTest() throws Exception {
     when(authorService.findById(authorId)).thenReturn(Optional.of(author));
     mockMvc.perform(get("/authors/{id}", authorId))
         .andExpect(status().isOk())
@@ -101,7 +101,7 @@ public class AuthorControllerTest {
 
   @Test
   @WithMockUser(username = "test", password = "test", roles = "USER")
-  public void addAuthorTest() throws Exception {
+  void addAuthorTest() throws Exception {
     String requestBody = objectMapper.writeValueAsString(authorDto);
     when(authorService.save(any(AuthorDto.class))).thenReturn(author);
     mockMvc.perform(MockMvcRequestBuilders.post("/authors")
@@ -113,7 +113,7 @@ public class AuthorControllerTest {
 
   @Test
   @WithMockUser(username = "test", password = "test", roles = "USER")
-  public void addAuthorInvalidNameTest() throws Exception {
+  void addAuthorInvalidNameTest() throws Exception {
     String requestBody = objectMapper.writeValueAsString(authorDtoInvalidParam);
     mockMvc.perform(post("/authors")
             .contentType(MediaType.APPLICATION_JSON)
@@ -123,7 +123,7 @@ public class AuthorControllerTest {
 
   @Test
   @WithMockUser(username = "test", password = "test", roles = "USER")
-  public void updateAuthorTest() throws Exception {
+  void updateAuthorTest() throws Exception {
     String requestBody = objectMapper.writeValueAsString(authorDto);
     when(authorService.update(any(Long.class), any(AuthorDto.class))).thenReturn(author);
     mockMvc.perform(put("/authors/{id}", authorId)
@@ -138,7 +138,7 @@ public class AuthorControllerTest {
 
   @Test
   @WithMockUser(username = "test", password = "test", roles = "USER")
-  public void updateAuthorInvalidNameTest() throws Exception {
+  void updateAuthorInvalidNameTest() throws Exception {
     String requestBody = objectMapper.writeValueAsString(authorDtoInvalidParam);
     mockMvc.perform(put("/authors/{id}", authorId)
             .contentType(MediaType.APPLICATION_JSON)
@@ -148,7 +148,7 @@ public class AuthorControllerTest {
 
   @Test
   @WithMockUser(username = "test", password = "test", roles = "USER")
-  public void deleteAuthorTest() throws Exception {
+  void deleteAuthorTest() throws Exception {
     mockMvc.perform(delete("/authors/{id}", authorId))
         .andExpect(status().isOk());
   }

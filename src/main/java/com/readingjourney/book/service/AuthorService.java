@@ -8,7 +8,6 @@ import com.readingjourney.book.mapper.AuthorMapper;
 import com.readingjourney.book.repository.AuthorRepository;
 import java.util.List;
 import java.util.Optional;
-import org.abalmas.aspect.Loggable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -29,10 +28,9 @@ public class AuthorService {
     return authorRepository.findAll();
   }
 
-  @Loggable
   public Optional<Author> findById(long id) {
     return Optional.ofNullable(authorRepository.findById(id)
-        .orElseThrow(() -> new AuthorNotFoundException("Author with id " + id + " not found")));
+        .orElseThrow(() -> new AuthorNotFoundException(id)));
   }
 
   /**
@@ -41,7 +39,6 @@ public class AuthorService {
    * @param authorDto the AuthorDto to be saved
    * @return the saved Author
    */
-  @Loggable
   public Author save(AuthorDto authorDto) {
     Author author = authorMapper.toEntity(authorDto);
     authorRepository.save(author);
@@ -61,7 +58,7 @@ public class AuthorService {
       author1.setLastName(authorDto.getLastName());
       author1.setBiography(authorDto.getBiography());
       return authorRepository.save(author1);
-    }).orElseThrow(() -> new AuthorNotFoundException("Author with id " + id + " not found"));
+    }).orElseThrow(() -> new AuthorNotFoundException(id));
   }
 
   /**
@@ -73,7 +70,7 @@ public class AuthorService {
     if (authorRepository.existsById(id)) {
       authorRepository.deleteById(id);
     } else {
-      throw new AuthorNotFoundException("Author with id " + id + " not found");
+      throw new AuthorNotFoundException(id);
     }
   }
 

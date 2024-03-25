@@ -35,7 +35,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(BookController.class)
 @Import(SecurityConfiguration.class)
-public class BookControllerTest {
+class BookControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -95,7 +95,7 @@ public class BookControllerTest {
 
   @Test
   @WithMockUser(username = "test", password = "test", roles = "USER")
-  public void findAllBooksTest() throws Exception {
+  void findAllBooksTest() throws Exception {
     when(bookService.findAll()).thenReturn(Collections.singletonList(book));
     mockMvc.perform(get("/books"))
         .andExpect(status().isOk())
@@ -104,7 +104,7 @@ public class BookControllerTest {
 
   @Test
   @WithMockUser(username = "test", password = "test", roles = "USER")
-  public void findBookByIdTest() throws Exception {
+  void findBookByIdTest() throws Exception {
     when(bookService.findById(bookId)).thenReturn(Optional.of(book));
     mockMvc.perform(get("/books/{id}", bookId))
         .andExpect(status().isOk())
@@ -114,7 +114,7 @@ public class BookControllerTest {
 
   @Test
   @WithMockUser(username = "test", password = "test", roles = "USER")
-  public void addBookTest() throws Exception {
+  void addBookTest() throws Exception {
     String requestBody = objectMapper.writeValueAsString(bookDto);
     when(bookService.save(eq(authorId), any(BookDto.class))).thenReturn(book);
     mockMvc.perform(post("/books/{id}", authorId)
@@ -127,7 +127,7 @@ public class BookControllerTest {
 
   @Test
   @WithMockUser(username = "test", password = "test", roles = "USER")
-  public void updateBookTest() throws Exception {
+  void updateBookTest() throws Exception {
     String requestBody = objectMapper.writeValueAsString(bookDtoUpdated);
     when(bookService.update(eq(bookId), any(BookDto.class))).thenReturn(book);
     mockMvc.perform(put("/books/{id}", bookId)
@@ -140,7 +140,7 @@ public class BookControllerTest {
 
   @Test
   @WithMockUser(username = "test", password = "test", roles = "USER")
-  public void deleteBookTest() throws Exception {
+  void deleteBookTest() throws Exception {
     mockMvc.perform(delete("/books/{id}", bookId))
         .andExpect(status().isOk());
   }

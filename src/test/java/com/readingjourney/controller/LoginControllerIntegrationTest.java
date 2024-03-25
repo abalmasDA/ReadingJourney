@@ -1,10 +1,11 @@
 package com.readingjourney.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.matchesPattern;
+import static org.hibernate.validator.internal.util.Contracts.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,9 +15,9 @@ import com.readingjourney.account.entity.Role;
 import com.readingjourney.account.entity.User;
 import com.readingjourney.account.jwt.JwtService;
 import com.readingjourney.account.repository.UserRepository;
-import com.readingjourney.book.dto.AuthorDto;
-import com.readingjourney.book.entity.Author;
-import com.readingjourney.book.repository.AuthorRepository;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +25,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -32,18 +34,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
-public class AuthorControllerIntegrationTest {
+class LoginControllerIntegrationTest {
 
   @Autowired
   private MockMvc mockMvc;
-
-  @Autowired
-  private AuthorRepository authorRepository;
 
   @Autowired
   private UserRepository userRepository;
@@ -60,17 +60,15 @@ public class AuthorControllerIntegrationTest {
   @Autowired
   private ObjectMapper objectMapper;
 
-  private final String AUTHORIZATION_HEADER = "Authorization";
+  @Value("${jwt.token.secret.key}")
+  private String secretKey;
 
-  private final String TOKEN_PREFIX = "Bearer ";
-
-  private final long AUTHOR_ID = 1;
-
-  private AuthorDto authorDto;
+  @Value("${jwt.token.expiration.time}")
+  private long expirationTime;
 
   private LoginDto loginDto;
 
-  private String token;
+  private LoginDto loginDtoInvalidParam;
 
   @BeforeAll
   public void setupOnce() throws Exception {
@@ -86,83 +84,66 @@ public class AuthorControllerIntegrationTest {
         .role(Role.USER)
         .build();
     userRepository.save(user);
+  }
 
+  @BeforeEach
+  public void setup() throws Exception {
     loginDto = LoginDto.builder()
         .email("usertest@gmail.com")
         .password("passwordtest123")
         .build();
 
+    loginDtoInvalidParam = LoginDto.builder()
+        .email("test@gmail.com")
+        .password("passwordtest123")
+        .build();
+  }
+
+  @Test
+  void loginUserTest() throws Exception {
+    String expectedEmail = "usertest@gmail.com";
     String requestBody = objectMapper.writeValueAsString(loginDto);
 
     MvcResult result = mockMvc.perform(post("/auth/login")
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestBody))
         .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.token").exists())
+        .andExpect(jsonPath("$.token",
+            matchesPattern("^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$")))
         .andReturn();
 
-    String response = result.getResponse().getContentAsString();
-    token = JsonPath.parse(response).read("$.token", String.class);
+    String responseToken = result.getResponse().getContentAsString();
+    String token = JsonPath.parse(responseToken).read("$.token");
 
-  }
+    Jws<Claims> jwsClaims = Jwts.parserBuilder()
+        .setSigningKey(secretKey)
+        .build()
+        .parseClaimsJws(token);
+    Claims claims = jwsClaims.getBody();
+    Object alg = jwsClaims.getHeader().get("alg");
+    Object subject = claims.getSubject();
+    long issuedAtInSeconds = claims.getIssuedAt().getTime() / 1000;
+    long expirationTimeInSeconds = claims.getExpiration().getTime() / 1000;
 
-  @BeforeEach
-  public void setup() throws Exception {
-    Author author = new Author()
-        .builder()
-        .id(AUTHOR_ID)
-        .firstName("Tester")
-        .lastName("Tester")
-        .biography("Tester")
-        .build();
-    authorRepository.save(author);
-
-    authorDto = AuthorDto.builder()
-        .firstName("Tester")
-        .lastName("Tester")
-        .biography("Tester")
-        .build();
-  }
-
-  @Test
-  public void allTest() throws Exception {
-    mockMvc.perform(get("/authors")
-            .header(AUTHORIZATION_HEADER, TOKEN_PREFIX + token))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    assertThat(alg).isEqualTo("HS256");
+    assertThat(subject).isEqualTo(expectedEmail);
+    assertTrue(issuedAtInSeconds <= System.currentTimeMillis() / 1000,
+        "Token is in the future.");
+    assertTrue(expirationTimeInSeconds >= System.currentTimeMillis() / 1000,
+        "Token 'exp' is in the past.");
+    assertTrue(expirationTimeInSeconds - issuedAtInSeconds == expirationTime / 1000,
+        "Token expiration time does not match the expected duration.");
   }
 
   @Test
-  public void findByIdTest() throws Exception {
-    mockMvc.perform(get("/authors/{id}", AUTHOR_ID)
-            .header(AUTHORIZATION_HEADER, TOKEN_PREFIX + token))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-  }
-
-  @Test
-  public void addTest() throws Exception {
-    mockMvc.perform(post("/authors")
-            .header(AUTHORIZATION_HEADER, TOKEN_PREFIX + token)
+  void loginUserInvalidNameTest() throws Exception {
+    String requestBody = objectMapper.writeValueAsString(loginDtoInvalidParam);
+    mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(authorDto)))
-        .andExpect(status().isOk());
-  }
-
-  @Test
-  public void updateTest() throws Exception {
-    mockMvc.perform(put("/authors/{id}", 1)
-            .header(AUTHORIZATION_HEADER, TOKEN_PREFIX + token)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(authorDto)))
-        .andExpect(status().isOk());
-  }
-
-  @Test
-  public void deleteTest() throws Exception {
-    mockMvc.perform(delete("/authors/{id}", AUTHOR_ID)
-            .header(AUTHORIZATION_HEADER, TOKEN_PREFIX + token))
-        .andExpect(status().isOk());
+            .content(requestBody))
+        .andExpect(status().isInternalServerError());
   }
 
 }
-

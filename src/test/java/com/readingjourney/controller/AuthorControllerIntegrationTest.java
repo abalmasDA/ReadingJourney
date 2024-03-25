@@ -14,12 +14,9 @@ import com.readingjourney.account.entity.Role;
 import com.readingjourney.account.entity.User;
 import com.readingjourney.account.jwt.JwtService;
 import com.readingjourney.account.repository.UserRepository;
-import com.readingjourney.book.dto.BookDto;
+import com.readingjourney.book.dto.AuthorDto;
 import com.readingjourney.book.entity.Author;
-import com.readingjourney.book.entity.Book;
 import com.readingjourney.book.repository.AuthorRepository;
-import com.readingjourney.book.repository.BookRepository;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,13 +37,10 @@ import org.springframework.test.web.servlet.MvcResult;
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @TestInstance(Lifecycle.PER_CLASS)
-public class BookControllerIntegrationTest {
+class AuthorControllerIntegrationTest {
 
   @Autowired
   private MockMvc mockMvc;
-
-  @Autowired
-  private BookRepository bookRepository;
 
   @Autowired
   private AuthorRepository authorRepository;
@@ -70,11 +64,9 @@ public class BookControllerIntegrationTest {
 
   private final String TOKEN_PREFIX = "Bearer ";
 
-  private final long BOOK_ID = 1;
-
   private final long AUTHOR_ID = 1;
 
-  private BookDto bookDto;
+  private AuthorDto authorDto;
 
   private LoginDto loginDto;
 
@@ -114,7 +106,7 @@ public class BookControllerIntegrationTest {
   }
 
   @BeforeEach
-  public void setup() {
+  public void setup() throws Exception {
     Author author = new Author()
         .builder()
         .id(AUTHOR_ID)
@@ -124,73 +116,53 @@ public class BookControllerIntegrationTest {
         .build();
     authorRepository.save(author);
 
-    Book book = new Book()
-        .builder()
-        .id(BOOK_ID)
-        .author(authorRepository.findById(AUTHOR_ID).get())
-        .title("Tester")
-        .rating(5L)
-        .yearPublication(LocalDate.now())
-        .numberPages(10)
-        .genre("Tester")
-        .format("Tester")
-        .edition("Tester")
-        .isbn(1234567890123L)
-        .build();
-    bookRepository.save(book);
-
-    bookDto = BookDto
-        .builder()
-        .title("Tester")
-        .rating(7L)
-        .yearPublication(LocalDate.now())
-        .numberPages(10)
-        .genre("Tester12345")
-        .format("Tester")
-        .edition("Tester")
-        .isbn(1334567890123L)
+    authorDto = AuthorDto.builder()
+        .firstName("Tester")
+        .lastName("Tester")
+        .biography("Tester")
         .build();
   }
 
   @Test
-  public void allTest() throws Exception {
-    mockMvc.perform(get("/books")
+  void allTest() throws Exception {
+    mockMvc.perform(get("/authors")
             .header(AUTHORIZATION_HEADER, TOKEN_PREFIX + token))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON));
   }
 
   @Test
-  public void findByIdTest() throws Exception {
-    mockMvc.perform(get("/books/{id}", BOOK_ID)
+  void findByIdTest() throws Exception {
+    mockMvc.perform(get("/authors/{id}", AUTHOR_ID)
             .header(AUTHORIZATION_HEADER, TOKEN_PREFIX + token))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON));
   }
 
   @Test
-  public void addTest() throws Exception {
-    mockMvc.perform(post("/books/{id}", AUTHOR_ID)
+  void addTest() throws Exception {
+    mockMvc.perform(post("/authors")
             .header(AUTHORIZATION_HEADER, TOKEN_PREFIX + token)
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(bookDto)))
+            .content(objectMapper.writeValueAsString(authorDto)))
         .andExpect(status().isOk());
   }
 
   @Test
-  public void updateTest() throws Exception {
-    mockMvc.perform(put("/books/{id}", BOOK_ID)
+  void updateTest() throws Exception {
+    mockMvc.perform(put("/authors/{id}", 1)
             .header(AUTHORIZATION_HEADER, TOKEN_PREFIX + token)
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(bookDto)))
+            .content(objectMapper.writeValueAsString(authorDto)))
         .andExpect(status().isOk());
   }
 
   @Test
-  public void deleteTest() throws Exception {
-    mockMvc.perform(delete("/books/{id}", BOOK_ID)
+  void deleteTest() throws Exception {
+    mockMvc.perform(delete("/authors/{id}", AUTHOR_ID)
             .header(AUTHORIZATION_HEADER, TOKEN_PREFIX + token))
         .andExpect(status().isOk());
   }
 
 }
+

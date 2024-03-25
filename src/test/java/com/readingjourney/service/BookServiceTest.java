@@ -30,7 +30,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 
 @ExtendWith(MockitoExtension.class)
-public class BookServiceTest {
+class BookServiceTest {
 
   @Mock
   private BookRepository bookRepository;
@@ -61,7 +61,7 @@ public class BookServiceTest {
     when(bookRepository.findAll()).thenReturn(Collections.singletonList(book));
     List<Book> result = bookService.findAll();
     assertThat(result).isNotNull();
-    Assertions.assertThat(result.size()).isEqualTo(expected);
+    Assertions.assertThat(result).hasSize(expected);
     verify(bookRepository).findAll();
   }
 

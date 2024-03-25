@@ -36,7 +36,7 @@ public class BookService {
 
   public Optional<Book> findById(long id) {
     return Optional.ofNullable(bookRepository.findById(id)
-        .orElseThrow(() -> new BookNotFoundException("Book with id " + id + " not found")));
+        .orElseThrow(() -> new BookNotFoundException(id)));
   }
 
   /**
@@ -49,7 +49,7 @@ public class BookService {
   public Book save(long authorId, BookDto bookDto) {
     Author author = authorRepository.findById(authorId)
         .orElseThrow(
-            () -> new AuthorNotFoundException("Author with id " + authorId + " not found"));
+            () -> new AuthorNotFoundException(authorId));
     Book book = bookMapper.toEntity(bookDto);
     book.setAuthor(author);
     return bookRepository.save(book);
@@ -73,7 +73,7 @@ public class BookService {
       book1.setEdition(bookDto.getEdition());
       book1.setIsbn(bookDto.getIsbn());
       return bookRepository.save(book1);
-    }).orElseThrow(() -> new BookNotFoundException("Book with id " + id + " not found"));
+    }).orElseThrow(() -> new BookNotFoundException(id));
   }
 
   /**
@@ -85,7 +85,7 @@ public class BookService {
     if (bookRepository.existsById(id)) {
       bookRepository.deleteById(id);
     } else {
-      throw new BookNotFoundException("Book with id " + id + " not found");
+      throw new BookNotFoundException(id);
     }
   }
 

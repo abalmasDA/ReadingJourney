@@ -27,7 +27,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @WebMvcTest(LoginController.class)
 @Import(SecurityConfiguration.class)
-public class LoginControllerTest {
+class LoginControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -70,7 +70,7 @@ public class LoginControllerTest {
   }
 
   @Test
-  public void loginUserTest() throws Exception {
+  void loginUserTest() throws Exception {
     String requestBody = objectMapper.writeValueAsString(loginDto);
     when(loginService.loginUser(any(LoginDto.class))).thenReturn(authResponse);
     mockMvc.perform(post("/auth/login")
@@ -83,7 +83,7 @@ public class LoginControllerTest {
   }
 
   @Test
-  public void registerUserInvalidNameTest() throws Exception {
+  void registerUserInvalidNameTest() throws Exception {
     String requestBody = objectMapper.writeValueAsString(loginDtoInvalidParam);
     mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
             .contentType(MediaType.APPLICATION_JSON)

@@ -1,11 +1,23 @@
 package com.readingjourney.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.readingjourney.book.dto.AuthorDto;
 import com.readingjourney.book.entity.Author;
 import com.readingjourney.book.exception.AuthorNotFoundException;
 import com.readingjourney.book.mapper.AuthorMapper;
 import com.readingjourney.book.repository.AuthorRepository;
 import com.readingjourney.book.service.AuthorService;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,17 +25,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
-public class AuthorServiceTest {
+class AuthorServiceTest {
 
   @Mock
   private AuthorRepository authorRepository;
@@ -45,11 +48,10 @@ public class AuthorServiceTest {
 
   @Test
   void findAllTest() {
-    long expected = 1;
+    int expected = 1;
     when(authorRepository.findAll()).thenReturn(Collections.singletonList(author));
     List<Author> authors = authorService.findAll();
-    assertThat(authors).isNotNull();
-    assertThat(authors.size()).isEqualTo(expected);
+    assertThat(authors).hasSize(expected);
     verify(authorRepository).findAll();
   }
 
