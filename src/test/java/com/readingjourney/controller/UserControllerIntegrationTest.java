@@ -55,11 +55,11 @@ class UserControllerIntegrationTest {
   @Autowired
   private ObjectMapper objectMapper;
 
-  private final String AUTHORIZATION_HEADER = "Authorization";
+  private static final String AUTHORIZATION_HEADER = "Authorization";
 
-  private final String TOKEN_PREFIX = "Bearer ";
+  private static final String TOKEN_PREFIX = "Bearer ";
 
-  private final long USER_ID = 2;
+  private static final long USER_ID = 2;
 
   private UserDto userDto;
 

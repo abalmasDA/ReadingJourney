@@ -15,7 +15,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
+/**
+ * Configuration class for Spring Security.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
@@ -34,6 +36,13 @@ public class SecurityConfiguration {
     return new BCryptPasswordEncoder();
   }
 
+  /**
+   * Generates the security filter chain for the given HttpSecurity object.
+   *
+   * @param http the HttpSecurity object to configure security for
+   * @return the configured SecurityFilterChain
+   * @throws Exception if an error occurs during the configuration process
+   */
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
@@ -59,6 +68,11 @@ public class SecurityConfiguration {
     return http.build();
   }
 
+  /**
+   * A description of the entire Java function.
+   *
+   * @return description of return value
+   */
   @Bean
   public AuthenticationProvider authenticationProvider() {
     DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -67,6 +81,12 @@ public class SecurityConfiguration {
     return daoAuthenticationProvider;
   }
 
+  /**
+   * A description of the entire Java function.
+   *
+   * @param authenticationConfiguration description of parameter
+   * @return description of return value
+   */
   @Bean
   public AuthenticationManager authenticationManager(
       AuthenticationConfiguration authenticationConfiguration) throws Exception {

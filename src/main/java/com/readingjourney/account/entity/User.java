@@ -14,6 +14,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Entity class representing a user in the system. A user is an entity with authentication
+ * credentials and associated profile information.
+ */
 @Entity
 @Table(name = "\"user\"")
 @Data

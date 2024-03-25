@@ -107,13 +107,13 @@ class RegistrationControllerIntegrationTest {
     Claims claims = jwsClaims.getBody();
     Object alg = jwsClaims.getHeader().get("alg");
     Object subject = claims.getSubject();
-    long issuedAtInSeconds = claims.getIssuedAt().getTime() / 1000;
-    long expirationTimeInSeconds = claims.getExpiration().getTime() / 1000;
 
     assertThat(alg).isEqualTo("HS256");
     assertThat(subject).isEqualTo(expectedEmail);
+    long issuedAtInSeconds = claims.getIssuedAt().getTime() / 1000;
     assertTrue(issuedAtInSeconds <= System.currentTimeMillis() / 1000,
         "Token is in the future.");
+    long expirationTimeInSeconds = claims.getExpiration().getTime() / 1000;
     assertTrue(expirationTimeInSeconds >= System.currentTimeMillis() / 1000,
         "Token 'exp' is in the past.");
     assertTrue(expirationTimeInSeconds - issuedAtInSeconds == expirationTime / 1000,

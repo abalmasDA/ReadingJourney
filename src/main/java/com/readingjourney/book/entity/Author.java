@@ -18,13 +18,19 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
+import lombok.ToString.Exclude;
 
 
+/**
+ * The type Author. This class represents an author entity.
+ */
 @Entity
 @Table(name = "author")
 @Getter
 @Setter
 @Builder
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @NamedEntityGraph(name = "Author.books", attributeNodes = @NamedAttributeNode("books"))
@@ -45,15 +51,8 @@ public class Author {
 
   @JsonManagedReference
   @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @Exclude
   private List<Book> books;
 
-  @Override
-  public String toString() {
-    return getClass().getSimpleName() + "(" +
-        "id = " + id + ", " +
-        "firstName = " + firstName + ", " +
-        "lastName = " + lastName + ", " +
-        "biography = " + biography + ")";
-  }
 
 }

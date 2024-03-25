@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+/**
+ * The enum Password strength.
+ */
 @Getter
 @ToString
 @AllArgsConstructor

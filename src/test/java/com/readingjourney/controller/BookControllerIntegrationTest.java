@@ -66,13 +66,13 @@ class BookControllerIntegrationTest {
   @Autowired
   private ObjectMapper objectMapper;
 
-  private final String AUTHORIZATION_HEADER = "Authorization";
+  private static final String AUTHORIZATION_HEADER = "Authorization";
 
-  private final String TOKEN_PREFIX = "Bearer ";
+  private static final String TOKEN_PREFIX = "Bearer ";
 
-  private final long BOOK_ID = 1;
+  private static final long BOOK_ID = 1;
 
-  private final long AUTHOR_ID = 1;
+  private static final long AUTHOR_ID = 1;
 
   private BookDto bookDto;
 

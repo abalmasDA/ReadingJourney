@@ -11,6 +11,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * The type User dto. This class represents the user data transfer object
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

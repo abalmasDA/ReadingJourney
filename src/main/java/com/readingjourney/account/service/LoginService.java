@@ -12,6 +12,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+/**
+ * The Login Service. This class provides user login functionality including authentication and
+ * token generation.
+ */
 @Service
 public class LoginService {
 
@@ -19,6 +23,13 @@ public class LoginService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
 
+  /**
+   * Instantiates a new Login service.
+   *
+   * @param userRepository        the user repository
+   * @param jwtService            the jwt service
+   * @param authenticationManager the authentication manager
+   */
   public LoginService(UserRepository userRepository, JwtService jwtService,
       AuthenticationManager authenticationManager) {
     this.userRepository = userRepository;

@@ -1,5 +1,8 @@
 package com.readingjourney.account.exception;
 
+/**
+ * Exception thrown when a user is not found.
+ */
 public class UserNotFoundException extends RuntimeException {
 
   private static final String MESSAGE_NOT_FOUND_FORMAT_ID = "User with id %d not found";

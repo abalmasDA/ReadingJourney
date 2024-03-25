@@ -8,6 +8,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * The type Login dto. This class represents the login data transfer object.
+ */
 @Getter
 @Builder
 @AllArgsConstructor
