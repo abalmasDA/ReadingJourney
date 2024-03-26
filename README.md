@@ -5,7 +5,7 @@ Crafted with the intent to enrich user experience, this API facilitates onboardi
 meticulous cataloging of literary works, and manages intricate associations between books, their
 authors, and readers
 
-![logo ReadingJourney](./media/logo-ReadingJourney.webp)
+![logo ReadingJourney](src/main/resources/media/ReadingJourney_Logo.png)
 
 
 ## Tech Stack
