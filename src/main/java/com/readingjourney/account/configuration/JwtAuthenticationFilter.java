@@ -15,6 +15,10 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+/**
+ * The type Jwt authentication filter. This class provides JWT authentication filtering for
+ * requests.
+ */
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 

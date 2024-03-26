@@ -23,6 +23,13 @@ public class BookService {
   private final AuthorRepository authorRepository;
   private final BookMapper bookMapper;
 
+  /**
+   * Instantiates a new Book service.
+   *
+   * @param bookRepository   the book repository
+   * @param authorRepository the author repository
+   * @param bookMapper       the book mapper
+   */
   public BookService(BookRepository bookRepository, AuthorRepository authorRepository,
       BookMapper bookMapper) {
     this.bookRepository = bookRepository;

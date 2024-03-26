@@ -15,6 +15,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * The type Book. This class represents a book entity.
+ */
 @Entity
 @Table(name = "book")
 @Data

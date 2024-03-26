@@ -4,6 +4,10 @@ import com.nulabinc.zxcvbn.Zxcvbn;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
+/**
+ * The Password strength validator. This class implements the validation logic for password strength
+ * based on the specified strength level.
+ */
 public class PasswordStrengthValidator implements
     ConstraintValidator<PasswordStrengthCheck, String> {
 

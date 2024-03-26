@@ -12,6 +12,10 @@ import java.util.Optional;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+/**
+ * The UserService. This class provides user-related operations such as finding, saving, updating,
+ * and deleting users.
+ */
 @Service
 public class UserService {
 
@@ -74,10 +78,19 @@ public class UserService {
     }
   }
 
+  /**
+   * Deletes all records in the repository.
+   */
   public void deleteAll() {
     userRepository.deleteAll();
   }
 
+  /**
+   * A description of the entire Java function.
+   *
+   * @param email description of parameter
+   * @return description of return value
+   */
   public User findUserByEmail(String email) throws UsernameNotFoundException {
     return userRepository.findByEmail(email)
         .orElseThrow(

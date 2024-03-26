@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * The type Author dto. This class represents an author dto.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

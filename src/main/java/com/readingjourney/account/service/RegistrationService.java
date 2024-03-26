@@ -12,6 +12,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ * The Registration Service. This class provides user registration functionality including user
+ * creation and token generation.
+ */
 @Service
 public class RegistrationService {
 
@@ -19,6 +23,9 @@ public class RegistrationService {
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
 
+  /**
+   * Instantiates a new Registration service.
+   */
   public RegistrationService(UserRepository userRepository,
       PasswordEncoder passwordEncoder, JwtService jwtService) {
     this.jwtService = jwtService;
