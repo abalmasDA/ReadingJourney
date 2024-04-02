@@ -7,6 +7,7 @@ import com.readingjourney.account.entity.User;
 import com.readingjourney.account.entity.UserDetailsImpl;
 import com.readingjourney.account.jwt.JwtService;
 import com.readingjourney.account.repository.UserRepository;
+import com.readingjourney.notification.service.UserRegistrationProducerService;
 import java.time.LocalDateTime;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,15 +23,17 @@ public class RegistrationService {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
+  private final UserRegistrationProducerService userRegistrationProducerService;
 
   /**
    * Instantiates a new Registration service.
    */
-  public RegistrationService(UserRepository userRepository,
-      PasswordEncoder passwordEncoder, JwtService jwtService) {
-    this.jwtService = jwtService;
+  public RegistrationService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+      JwtService jwtService, UserRegistrationProducerService userRegistrationProducerService) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
+    this.jwtService = jwtService;
+    this.userRegistrationProducerService = userRegistrationProducerService;
   }
 
   /**
@@ -52,6 +55,7 @@ public class RegistrationService {
     userRepository.save(user);
     UserDetails userDetails = new UserDetailsImpl(user);
     var jwtToken = jwtService.generateToken(userDetails);
+    userRegistrationProducerService.sendRegistrationMessage(user.getEmail());
     return AuthResponse.builder()
         .token(jwtToken)
         .build();
