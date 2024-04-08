@@ -13,6 +13,7 @@ import com.readingjourney.account.entity.User;
 import com.readingjourney.account.jwt.JwtService;
 import com.readingjourney.account.repository.UserRepository;
 import com.readingjourney.account.service.RegistrationService;
+import com.readingjourney.notification.service.UserRegistrationProducerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,6 +35,9 @@ class RegistrationServiceTest {
 
   @Mock
   private JwtService jwtService;
+
+  @Mock
+  private UserRegistrationProducerService userRegistrationProducerService;
 
   @InjectMocks
   private RegistrationService registrationService;
@@ -85,6 +89,7 @@ class RegistrationServiceTest {
     assertThat(savedUser.getPassword()).isEqualTo(encodedPassword);
     assertThat(savedUser.getRole()).isEqualTo(Role.USER);
     assertThat(savedUser.getCreatedAt()).isNotNull();
+    verify(userRegistrationProducerService).sendRegistrationMessage(savedUser.getEmail());
   }
 
 }
