@@ -57,11 +57,10 @@ class BookServiceTest {
 
   @Test
   void findAllTest() {
-    int expected = 1;
     when(bookRepository.findAll()).thenReturn(Collections.singletonList(book));
     List<Book> result = bookService.findAll();
     assertThat(result).isNotNull();
-    Assertions.assertThat(result).hasSize(expected);
+    Assertions.assertThat(result).hasSize(1);
     verify(bookRepository).findAll();
   }
 
