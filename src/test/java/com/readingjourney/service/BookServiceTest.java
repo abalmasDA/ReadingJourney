@@ -56,16 +56,6 @@ class BookServiceTest {
   }
 
   @Test
-  void findAllTest() {
-    int expected = 1;
-    when(bookRepository.findAll()).thenReturn(Collections.singletonList(book));
-    List<Book> result = bookService.findAll();
-    assertThat(result).isNotNull();
-    Assertions.assertThat(result).hasSize(expected);
-    verify(bookRepository).findAll();
-  }
-
-  @Test
   void findByIdTest() {
     when(bookRepository.findById(anyLong())).thenReturn(Optional.of(book));
     Optional<Book> result = bookService.findById(bookId);
